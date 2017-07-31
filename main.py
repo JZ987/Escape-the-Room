@@ -25,9 +25,19 @@ jinja_environment = jinja2.Environment(loader=
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        template_vars = {}
+        user = users.get_current_user()
+        if user:
+            greeting = ('Welcome, %s! (<a href="%s">Sign out</a>)' %
+                (user.nickname(), users.create_logout_url('/')))
+        else:
+            greeting = ('<a href="%s">Sign in</a>' %
+                users.create_login_url('/'))
+
+        loginlink = (
+            '<html><body>{}</body></html>'.format(greeting))
+        my_vars = { "loginlink": loginlink}
         template = jinja_environment.get_template('templates/index.html')
-        self.response.write(template.render(template_vars))
+        self.response.write(template.render(my_vars))
 
 class GameHandler(webapp2.RequestHandler):
     def get(self):
@@ -44,26 +54,12 @@ class InstructionsHandler(webapp2.RequestHandler):
 class HighScoreHandler(webapp2.RequestHandler):
     def get(self):
         template_vars = {}
-        template = jinja_environment.get_template('templates/highscore.html')
+        template = jinja_environment.get_template('templates/highscores.html')
         self.response.write(template.render(template_vars))
-
-class MainPage(webapp2.RequestHandler):
-    def get(self):
-        user = users.get_current_user()
-        if user:
-            greeting = ('Welcome, %s! (<a href="%s">sign out</a>)' %
-                (user.nickname(), users.create_logout_url('/')))
-        else:
-            greeting = ('<a href="%s">Sign in or register</a>.' %
-                users.create_login_url('/'))
-
-        self.response.write('<html><body>%s</body></html>' % greeting)
-
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/game', GameHandler),
-    ('/instructions', InstructionsHandler)
-    ('/highscore', HighScoreHandler)
-    ('/login, MainPage')
+    ('/instructions', InstructionsHandler),
+    ('/highscores', HighScoreHandler)
 ], debug=True)
