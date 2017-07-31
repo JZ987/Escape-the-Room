@@ -2,12 +2,14 @@ h1 {
   font-family: fantasy;
   font-size: 500%;
   text-align: center;
+  color: red;
 }
 
 h2 {
   font-family: inherit;
   font-size: 200%;
   text-align: center;
+  color: red;
 }
 
 html {
@@ -15,6 +17,8 @@ html {
 }
 
 body {
+  background-image: url('images/background.jpg');
+  background-size: 100% 100%;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -24,7 +28,18 @@ body {
 button {
   width: 120px;
   height: 50px;
-  font-size: 100%;
+  font-size: 110%;
+  color: red;
+  background-color: none;
+  border: none;
+}
+
+#instruction {
+  margin-right: 20px;
+}
+
+#play {
+  margin-right: 20px;
 }
 
 #boxofbuttons {
