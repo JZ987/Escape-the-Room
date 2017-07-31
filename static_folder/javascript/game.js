@@ -1,9 +1,17 @@
 var myGamePiece;
+var object = [];
 
 function startGame() {
     myGameArea.start();
     myGamePiece = new component(30, 30, "red", myGameArea.canvas.width/2-15, myGameArea.canvas.height/2-15);
-    object = new component(10, 200, "green", 300, 120);
+    object = [
+      new component(1, myGameArea.canvas.height, "black", 0, 0),
+      new component(myGameArea.canvas.width, 1, "black", 0, myGameArea.canvas.height-1),
+      new component(1, myGameArea.canvas.height, "black", myGameArea.canvas.width-1, 0),
+      new component(myGameArea.canvas.width, 1, "black", 0, 0),
+      new component(50, 50, "green", 300, 120),
+      new component(20, 20, "blue", 400, 120)
+    ];
 }
 
 var myGameArea = {
@@ -41,31 +49,55 @@ function component(width, height, color, x, y) {
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
     this.newPos = function() {
-        this.x += this.speedX;
-        this.y += this.speedY;
+      this.x += this.speedX;
+      this.y += this.speedY;
     }
-    this.crashWith = function(otherobj) {
-        var myleft = this.x;
-        var myright = this.x + (this.width);
-        var mytop = this.y;
-        var mybottom = this.y + (this.height);
-        var otherleft = otherobj.x;
-        var otherright = otherobj.x + (otherobj.width);
-        var othertop = otherobj.y;
-        var otherbottom = otherobj.y + (otherobj.height);
-    }
+}
+
+function checkCollision(otherobj){
+  var newleft = myGamePiece.x + myGamePiece.speedX;
+  var newright = newleft + (myGamePiece.width);
+  var newtop = myGamePiece.y + myGamePiece.speedY;
+  var newbottom = newtop + (myGamePiece.height);
+  var otherleft = otherobj.x;
+  var otherright = otherobj.x + (otherobj.width);
+  var othertop = otherobj.y;
+  var otherbottom = otherobj.y + (otherobj.height);
+  if((newtop < otherbottom) &&
+     (newbottom > othertop) &&
+     (newleft < otherright) &&
+     (newright > otherleft)){
+       return true;
+     }else{
+       return false;
+     }
+}
+
+function isActivableObject(){
+  return false;
 }
 
 function updateGameArea() {
     myGameArea.clear();
-    object.update();
+    for(var i = 0; i < object.length; i+=1){
+      object[i].update();
+    }
     myGamePiece.speedX = 0;
     myGamePiece.speedY = 0;
-    if (myGameArea.keys && myGameArea.keys[37]) {myGamePiece.speedX = -4; }
-    if (myGameArea.keys && myGameArea.keys[39]) {myGamePiece.speedX = 4; }
-    if (myGameArea.keys && myGameArea.keys[38]) {myGamePiece.speedY = -4; }
-    if (myGameArea.keys && myGameArea.keys[40]) {myGamePiece.speedY = 4; }
-    myGamePiece.crashWith(object);
+    if (myGameArea.keys && myGameArea.keys[37]) {myGamePiece.speedX = -2;}
+    if (myGameArea.keys && myGameArea.keys[39]) {myGamePiece.speedX = 2;}
+    if (myGameArea.keys && myGameArea.keys[38]) {myGamePiece.speedY = -2;}
+    if (myGameArea.keys && myGameArea.keys[40]) {myGamePiece.speedY = 2;}
+    for(var i = 0; i < object.length; i+=1){
+      if(checkCollision(object[i])){
+        myGamePiece.speedX = 0;
+        myGamePiece.speedY = 0;
+        if(isActivableObject() && (myGameArea.keys && myGameArea.keys[32])){
+
+        }
+        break;
+      }
+    }
     myGamePiece.newPos();
     myGamePiece.update();
 }
