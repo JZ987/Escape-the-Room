@@ -33,7 +33,15 @@ class GameHandler(webapp2.RequestHandler):
         template = jinja_environment.get_template('templates/game.html')
         self.response.write(template.render(template_vars))
 
+class InstructionsHandler(webapp2.RequestHandler):
+    def get(self):
+        template_vars = {}
+        template = jinja_environment.get_template('templates/instructions.html')
+        self.response.write(template.render(template_vars))
+
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/game', GameHandler)
+    ('/instructions', InstructionsHandler)
 ], debug=True)
