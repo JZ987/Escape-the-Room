@@ -8,24 +8,35 @@ function startGame() {
   loadImages();
   myPlayer = new component(73, 149, girlBack, myGameArea.canvas.width/2-15, myGameArea.canvas.height/2-15, "player");
   myText = new textMessage("15px Fantasy", "black", myGameArea.canvas.width-160, 40);
-  obstacles = [
+  //wallpaper
+  for(var i = 10; i <= 1120; i+=80){
+    console.log(i);
+    obstacles.push(new component(80, 150, "/resources/images/wallpaper.png", i, 10, "image"));
+  }
+  obstacles.push(
     //boundaries
     new component(300, myGameArea.canvas.height-265, "white", myGameArea.canvas.width-310, 265),
     new component(10, myGameArea.canvas.height, "black", 0, 0), //left
     new component(10, myGameArea.canvas.height, "black", myGameArea.canvas.width-310, 0), //right
-    new component(myGameArea.canvas.width-300, 150, "black", 0, 0), //top
+    new component(myGameArea.canvas.width-300, 10, "black", 0, 0), //top
     new component(myGameArea.canvas.width, 10, "black", 0, myGameArea.canvas.height-10), //bottom
     new component(300, 10, "black", myGameArea.canvas.width-300, 0),
     new component(10, myGameArea.canvas.height, "black", myGameArea.canvas.width-10, 0),
     new component(300, 265, "black", myGameArea.canvas.width-300, 0),
+    new component(myGameArea.canvas.width-300, 2, "black", 0, 160),
     //new component(10, 260, "black", myGameArea.canvas.width-315, 0),
     //new component(315, 150, "black", myGameArea.canvas.width-315, 260),
-    //wallpaper
     //objects
-    new component(300, 250, "/resources/images/speech-bubble-md.png", myGameArea.canvas.width-305, 7, "image"),
-    new component(190, 200, "/resources/images/closet.png", 100, 0, "image")
+    new component(300, 250, "/resources/images/speech-bubble-md.png", myGameArea.canvas.width-305, 7, "image", "speech"),
+    new component(53, 200, "/resources/images/clock.png", 25, 10, "image", "clock"),
+    new component(190, 200, "/resources/images/closet.png", 100, 10, "image", "closet"),
+    new component(190, 250, "/resources/images/piano.png", 200, 300, "image", "piano"),
+    new component(224, 283, "/resources/images/bed.png", 725, 80, "image", "bed"),
+    new component(46, 50, "/resources/images/random painting.png", 625, 20, "image"),
+    new component(60, 50, "/resources/images/random painting 2.png", 375, 20, "image"),
     //key objects
-  ];
+    new component(131, 95, "resources/images/dresser.png", 550, 90, "image", "dresser")
+  );
 }
 
 var myGameArea = {
@@ -66,8 +77,9 @@ function loadImages(){
   girlRight3 = new Image(); girlRight3.src = "/resources/images/girl right 3.png";
 }
 
-function component(width, height, color, x, y, type) {
+function component(width, height, color, x, y, type, name) {
   this.type = type;
+  this.name = name;
   this.activable = false;
   this.x = x;
   this.y = y;
@@ -82,12 +94,23 @@ function component(width, height, color, x, y, type) {
   }else if(type == "image"){
     this.image = new Image();
     this.image.src = color;
-  }else if(type == "activableObjects"){
-    this.activable = true;
-    this.activated = false;
   }
   this.update = function(){
     ctx = myGameArea.context;
+    if(this.activated){
+      if(this.name == "piano"){
+        myText.text = "This is a piano, I don't know how to play it though.";
+      }else if(this.name == "dresser"){
+        myText.text = "This is a really ugly dresser, there's dust everywhere.";
+      }else if(this.name == "clock"){
+        myText.text = "This is a grandfather clock, the ticking is really annoy.";
+      }else if(this.name == "closet"){
+        myText.text = "There's nothing inside here, don't peek!";
+      }else if(this.name == "bed"){
+        myText.text = "This is the bed, do you want to sleep in it? (You can't since there's no sleep feature :P)";
+      }
+      this.activated = false;
+    }
     if(this.type == "player"){
       this.x += this.speedX;
       this.y += this.speedY;
@@ -127,13 +150,6 @@ function component(width, height, color, x, y, type) {
       ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }else if(this.type == "image"){
       ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-    }else if(this.activable){
-      if(this.activated){
-        console.log("This object got activated");
-        this.activated = false;
-      }
-      ctx.fillStyle = color;
-      ctx.fillRect(this.x, this.y, this.width, this.height);
     }else{
       ctx.fillStyle = color;
       ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -148,7 +164,7 @@ function textMessage(font, color, x, y){
   var new_line = words[0];
   var lines = [];
   for(var i = 1; i < words.length; i+=1) {
-    if (ctx.measureText(new_line + " " + words[i]).width < 150) {
+    if (ctx.measureText(new_line + " " + words[i]).width < 250) {
       new_line += " " + words[i];
     } else {
       lines.push(new_line);
@@ -169,7 +185,7 @@ function textMessage(font, color, x, y){
       var new_line = words[0];
       var lines = [];
       for(var i = 1; i < words.length; i+=1) {
-        if (ctx.measureText(new_line + " " + words[i]).width < 280) {
+        if (ctx.measureText(new_line + " " + words[i]).width < 250) {
           new_line += " " + words[i];
         } else {
           lines.push(new_line);
@@ -190,7 +206,7 @@ function textMessage(font, color, x, y){
 }
 
 function rewriteMessage(){
-  return false;
+  return true;
 }
 
 function checkCollision(otherobj, speedX, speedY){
@@ -198,10 +214,17 @@ function checkCollision(otherobj, speedX, speedY){
   var newright = newleft + 50;
   var newtop = myPlayer.y + 110 + speedY;
   var newbottom = newtop + 50;
-  var otherleft = otherobj.x;
-  var otherright = otherobj.x + (otherobj.width);
-  var othertop = otherobj.y;
-  var otherbottom = otherobj.y + (otherobj.height);
+  if(otherobj.x == 200){
+    var otherleft = otherobj.x;
+    var otherright = otherobj.x + (otherobj.width);
+    var othertop = otherobj.y + 10;
+    var otherbottom = otherobj.y + (otherobj.height);
+  }else{
+    var otherleft = otherobj.x;
+    var otherright = otherobj.x + (otherobj.width);
+    var othertop = otherobj.y;
+    var otherbottom = otherobj.y + (otherobj.height);
+  }
   if((newtop < otherbottom) && (newbottom > othertop) && (newleft < otherright) && (newright > otherleft)){
     return true;
   }else{
@@ -228,7 +251,6 @@ function updateGameArea() {
   // var t0 = performance.now();
   myGameArea.clear();
   myGameArea.frameNo += 1;
-  console.log(myGameArea.frameNo);
   for(var i = 0; i < obstacles.length; i+=1){
     obstacles[i].update();
   }
