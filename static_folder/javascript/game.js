@@ -1,4 +1,4 @@
-var myPlayer, myText, girlBack, girlFront, girlLeft, girlRight;
+var myPlayer, myText;
 var obstacles = [];
 var text = "Grace has been kidnapped in her sleep and locked in an unknown room. Gather the clues to discover who the culprit is and escape the room.";
 //var text = "This is a picture of the sun. This text is for testing purposes. Good bye and have a nice day!"
@@ -6,7 +6,7 @@ var text = "Grace has been kidnapped in her sleep and locked in an unknown room.
 function startGame() {
   myGameArea.start();
   loadImages();
-  myPlayer = new component(73, 149, girlBack, myGameArea.canvas.width/2-15, myGameArea.canvas.height/2-15, "player");
+  myPlayer = new component(73, 149, girlBack, 550, 400, "player");
   myText = new textMessage("15px Fantasy", "black", myGameArea.canvas.width-160, 40);
   //wallpaper
   for(var i = 10; i <= 1120; i+=80){
@@ -28,14 +28,22 @@ function startGame() {
     //new component(315, 150, "black", myGameArea.canvas.width-315, 260),
     //objects
     new component(300, 250, "/resources/images/speech-bubble-md.png", myGameArea.canvas.width-305, 7, "image", "speech"),
-    new component(53, 200, "/resources/images/clock.png", 25, 10, "image", "clock"),
+    new component(53, 200, clock, 25, 10, "image", "clock"),
     new component(190, 200, "/resources/images/closet.png", 100, 10, "image", "closet"),
     new component(190, 250, "/resources/images/piano.png", 200, 300, "image", "piano"),
-    new component(224, 283, "/resources/images/bed.png", 725, 80, "image", "bed"),
+    new component(224, 284, "/resources/images/bed2.png", 725, 60, "image", "bed"),
     new component(46, 50, "/resources/images/random painting.png", 625, 20, "image"),
     new component(60, 50, "/resources/images/random painting 2.png", 375, 20, "image"),
+    new component(53, 100, "/resources/images/chair.png", 815, 440, "image"),
+    new component(64, 100, "/resources/images/chair3.png", 710, 515, "image"),
+    new component(64, 100, "/resources/images/chair4.png", 900, 515, "image"),
+    new component(180, 150, "/resources/images/table.png", 750, 500, "image", "table"),
+    new component(53, 91, "/resources/images/chair2.png", 815, 615, "image"),
+    new component(38, 50, "/resources/images/candlestick.png", 820, 525, "image"),
+
     //key objects
-    new component(131, 95, "resources/images/dresser.png", 550, 90, "image", "dresser")
+    new component(131, 95, "resources/images/dresser.png", 550, 90, "image", "dresser"),
+    new component(10, 50, "#451411", 10, 400, "", "dreamcatcher")
   );
 }
 
@@ -75,12 +83,15 @@ function loadImages(){
   girlRight = new Image(); girlRight.src = "/resources/images/girl right.png";
   girlRight2 = new Image(); girlRight2.src = "/resources/images/girl right 2.png";
   girlRight3 = new Image(); girlRight3.src = "/resources/images/girl right 3.png";
+  clock = new Image(); clock.src = "/resources/images/clock.png";
+  clock2 = new Image(); clock2.src = "/resources/images/clock 2.png";
+  clock3 = new Image(); clock3.src = "/resources/images/clock 3.png";
 }
 
 function component(width, height, color, x, y, type, name) {
   this.type = type;
   this.name = name;
-  this.activable = false;
+  this.activated = false;
   this.x = x;
   this.y = y;
   this.width = width;
@@ -92,22 +103,28 @@ function component(width, height, color, x, y, type, name) {
     this.direction = "up";
     this.moving = false;
   }else if(type == "image"){
-    this.image = new Image();
-    this.image.src = color;
+    if(this.name == "clock"){
+      this.image = color;
+    }else{
+      this.image = new Image();
+      this.image.src = color;
+    }
   }
   this.update = function(){
     ctx = myGameArea.context;
     if(this.activated){
       if(this.name == "piano"){
-        myText.text = "This is a piano, I don't know how to play it though.";
+        myText.text = "This is a piano. I don't know how to play it though.";
       }else if(this.name == "dresser"){
-        myText.text = "This is a really ugly dresser, there's dust everywhere.";
+        myText.text = "This is a really ugly dresser. There's dust everywhere.";
       }else if(this.name == "clock"){
-        myText.text = "This is a grandfather clock, the ticking is really annoy.";
+        myText.text = "This is a grandfather clock. The ticking is really annoying.";
       }else if(this.name == "closet"){
-        myText.text = "There's nothing inside here, don't peek!";
+        myText.text = "There's nothing inside here so don't peek!";
       }else if(this.name == "bed"){
-        myText.text = "This is the bed, do you want to sleep in it? (You can't since there's no sleep feature :P)";
+        myText.text = "This is the bed. Do you want to sleep in it? (You can't since there's no sleep feature :P)";
+      }else if(this.name == "dreamcatcher"){
+        myText.text = "This is a dream catcher. It looks really creepy...";
       }
       this.activated = false;
     }
@@ -149,6 +166,13 @@ function component(width, height, color, x, y, type, name) {
       }
       ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }else if(this.type == "image"){
+      if(this.name == "clock"){
+        if(myGameArea.frameNo % 40 <= 20){
+          this.image = clock;
+        }else{
+          this.image = clock3;
+        }
+      }
       ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }else{
       ctx.fillStyle = color;
@@ -214,7 +238,7 @@ function checkCollision(otherobj, speedX, speedY){
   var newright = newleft + 50;
   var newtop = myPlayer.y + 110 + speedY;
   var newbottom = newtop + 50;
-  if(otherobj.x == 200){
+  if(otherobj.name == "piano"){
     var otherleft = otherobj.x;
     var otherright = otherobj.x + (otherobj.width);
     var othertop = otherobj.y + 10;
