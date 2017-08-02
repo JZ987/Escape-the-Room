@@ -57,7 +57,11 @@ class InstructionsHandler(webapp2.RequestHandler):
         self.response.write(template.render(template_vars))
 
 class SaveScoreHandler(webbapp2.RequestHandler):
-    
+    def post(self):
+        user = users.get_current_user()
+        score = self.request.get('score')
+        savescore = Scores(name=user.nickname(), score=int(score))
+        savescore.put()
 
 class HighScoreHandler(webapp2.RequestHandler):
     def get(self):
@@ -69,5 +73,6 @@ app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/game', GameHandler),
     ('/instructions', InstructionsHandler),
-    ('/highscores', HighScoreHandler)
+    ('/highscores', HighScoreHandler),
+    ('/savescore', SaveScoreHandler)
 ], debug=True)
