@@ -1,6 +1,7 @@
 var myPlayer, myText;
 var obstacles = [];
 var text = "Grace has been kidnapped in her sleep and locked in an unknown room. Gather the clues to discover who the culprit is and escape the room.";
+var quoteComplete = dresserComplete = pictureComplete = dreamCatcherComplete = safeComplete = false;
 //var text = "This is a picture of the sun. This text is for testing purposes. Good bye and have a nice day!"
 
 function startGame() {
@@ -32,6 +33,7 @@ function startGame() {
     new component(190, 200, "/resources/images/closet.png", 100, 10, "image", "closet"),
     new component(190, 250, "/resources/images/piano.png", 200, 300, "image", "piano"),
     new component(224, 284, "/resources/images/bed2.png", 725, 60, "image", "bed"),
+    new component(72, 125, "/resources/images/nightstand.png", 940, 70, "image", "nightstand"),
     new component(46, 50, "/resources/images/random painting.png", 625, 20, "image"),
     new component(60, 50, "/resources/images/random painting 2.png", 375, 20, "image"),
     new component(53, 100, "/resources/images/chair.png", 815, 440, "image"),
@@ -42,8 +44,11 @@ function startGame() {
     new component(38, 50, "/resources/images/candlestick.png", 820, 525, "image"),
 
     //key objects
-    new component(131, 95, "resources/images/dresser.png", 550, 90, "image", "dresser"),
-    new component(10, 50, "#451411", 10, 400, "", "dreamcatcher")
+    new component(131, 95, "/resources/images/dresser.png", 550, 90, "image", "dresser"),
+    new component(10, 50, "#451411", 10, 400, "", "dreamcatcher"),
+    new component(14, 17, "/resources/images/note.png", 600, 95, "image"),
+    new component(100, 15, "red", 300, myGameArea.canvas.height-15, "", "door"),
+    new component(55, 75, "/resources/images/chest side closed.png", myGameArea.canvas.width-365, 350, "image", "chest")
   );
 }
 
@@ -67,6 +72,9 @@ var myGameArea = {
   },
   clear : function() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  },
+  stop : function() {
+      clearInterval(this.interval);
   }
 }
 
@@ -125,6 +133,10 @@ function component(width, height, color, x, y, type, name) {
         myText.text = "This is the bed. Do you want to sleep in it? (You can't since there's no sleep feature :P)";
       }else if(this.name == "dreamcatcher"){
         myText.text = "This is a dream catcher. It looks really creepy...";
+      }else if(this.name == "chest"){
+        chestAction();
+      }else if(this.name == "door"){
+        doorAction();
       }
       this.activated = false;
     }
@@ -179,6 +191,16 @@ function component(width, height, color, x, y, type, name) {
       ctx.fillRect(this.x, this.y, this.width, this.height);
     }
   }
+}
+
+function chestAction(){
+  myText.text = "Please input the 4 digit number: ";
+
+}
+
+function doorAction(){
+  myText.text = "Your time is: " + myGameArea.frameNo;
+  myGameArea.stop();
 }
 
 function textMessage(font, color, x, y){
