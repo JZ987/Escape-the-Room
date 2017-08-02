@@ -12,3 +12,7 @@ Image Credits:
 - https://thestoryteller01.files.wordpress.com/2014/08/vx-interior-tileset1.png
 - Lanea Zimmerman
 - https://www.spriters-resource.com/ds_dsi/castlevaniaorderofecclesia/sheet/19157/
+- http://3.bp.blogspot.com/-sPMmB4mgQMc/UMlLtZyuTUI/AAAAAAAAADw/VbobRFOc1yw/s1600/tilez.png
+- http://ayene-chan.deviantart.com/art/RPG-Maker-VX-Ace-VX-like-XP-Tile-472063464
+- http://imgur.com/ZBhAJXq
+- https://opengameart.org/content/lpc-house-insides
