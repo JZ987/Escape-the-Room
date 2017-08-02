@@ -10,18 +10,20 @@ function startGame() {
   myText = new textMessage("15px Fantasy", "black", myGameArea.canvas.width-160, 40);
   obstacles = [
     //boundaries
+    new component(300, myGameArea.canvas.height-265, "white", myGameArea.canvas.width-310, 265),
     new component(10, myGameArea.canvas.height, "black", 0, 0), //left
     new component(10, myGameArea.canvas.height, "black", myGameArea.canvas.width-310, 0), //right
     new component(myGameArea.canvas.width-300, 150, "black", 0, 0), //top
     new component(myGameArea.canvas.width, 10, "black", 0, myGameArea.canvas.height-10), //bottom
     new component(300, 10, "black", myGameArea.canvas.width-300, 0),
     new component(10, myGameArea.canvas.height, "black", myGameArea.canvas.width-10, 0),
-    new component(300, 10, "black", myGameArea.canvas.width-300, 255),
+    new component(300, 265, "black", myGameArea.canvas.width-300, 0),
     //new component(10, 260, "black", myGameArea.canvas.width-315, 0),
     //new component(315, 150, "black", myGameArea.canvas.width-315, 260),
+    //wallpaper
     //objects
     new component(300, 250, "/resources/images/speech-bubble-md.png", myGameArea.canvas.width-305, 7, "image"),
-    new component(190, 200, "/resources/images/closet.png", 45, 5, "image")
+    new component(190, 200, "/resources/images/closet.png", 100, 0, "image")
     //key objects
   ];
 }
@@ -192,9 +194,9 @@ function rewriteMessage(){
 }
 
 function checkCollision(otherobj, speedX, speedY){
-  var newleft = myPlayer.x + 35 + speedX;
+  var newleft = myPlayer.x + 10 + speedX;
   var newright = newleft + 50;
-  var newtop = myPlayer.y + 100 + speedY;
+  var newtop = myPlayer.y + 110 + speedY;
   var newbottom = newtop + 50;
   var otherleft = otherobj.x;
   var otherright = otherobj.x + (otherobj.width);
