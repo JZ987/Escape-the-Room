@@ -17,7 +17,7 @@
 import webapp2
 import jinja2
 import os
-from google.appengine.api import users
+# from google.appengine.api import users
 from google.appengine.ext import ndb
 
 
@@ -30,19 +30,19 @@ class Scores(ndb.Model):
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        user = users.get_current_user()
-        if user:
-            greeting = ('Welcome, %s! (<a href="%s">Sign out</a>)' %
-                (user.nickname(), users.create_logout_url('/')))
-        else:
-            greeting = ('<a href="%s">Sign in</a>' %
-                users.create_login_url('/'))
-
-        loginlink = (
-            '<html><body>{}</body></html>'.format(greeting))
-        my_vars = { "loginlink": loginlink}
+        # user = users.get_current_user()
+        # if user:
+        #     greeting = ('Welcome, %s! (<a href="%s">Sign out</a>)' %
+        #         (user.nickname(), users.create_logout_url('/')))
+        # else:
+        #     greeting = ('<a href="%s">Sign in</a>' %
+        #         users.create_login_url('/'))
+        #
+        # loginlink = (
+        #     '<html><body>{}</body></html>'.format(greeting))
+        # my_vars = { "loginlink": loginlink}
         template = jinja_environment.get_template('templates/index.html')
-        self.response.write(template.render(my_vars))
+        self.response.write(template.render())
 
 class GameHandler(webapp2.RequestHandler):
     def get(self):
@@ -56,21 +56,18 @@ class InstructionsHandler(webapp2.RequestHandler):
         template = jinja_environment.get_template('templates/instructions.html')
         self.response.write(template.render(template_vars))
 
-<<<<<<< HEAD
-class SaveScoreHandler(webbapp2.RequestHandler):
+class SaveScoreHandler(webapp2.RequestHandler):
     def post(self):
         user = users.get_current_user()
         score = self.request.get('score')
         savescore = Scores(name=user.nickname(), score=int(score))
         savescore.put()
-=======
-# class SaveScoreHandler(webbapp2.RequestHandler):
-
->>>>>>> 1343e929fb724b395855e39c6d13c5dff75c95e6
 
 class HighScoreHandler(webapp2.RequestHandler):
     def get(self):
-        template_vars = {}
+        query = Scores.query().order(Scores.score)
+        highscores = query.fetch(limit=10)
+        template_vars = {"scores" : highscores}
         template = jinja_environment.get_template('templates/highscores.html')
         self.response.write(template.render(template_vars))
 

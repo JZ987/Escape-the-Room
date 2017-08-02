@@ -10,7 +10,10 @@
   <body>
     <div id="box">
       <h1>ESCAPE THE ROOM</h1>
-      <h2>{{loginlink}}</h2>
+      <!-- <h2>{{loginlink}}</h2> -->
+      <form>
+        Name: <input type="text" name="name" onkeypress="enterName(event)" id=nameinput/>
+      </form>
       <div id="boxofbuttons">
         <a href ="/instructions">
         <button type ="submit" id="instruction">Instructions</button></a>

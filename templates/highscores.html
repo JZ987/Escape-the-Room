@@ -9,9 +9,16 @@
     <form action='/' method=get>
       <button type="submit" id=hsbutton>Back</button>
     <div id="highscorebox">
-      <div id="highscoretext">
-        <h1>High Scores</h1>
-      </div>
+      <h1>High Scores</h1>
+        <table>
+          <tr>
+            <th class="rowheader">Email</th>
+            <th class="rowheader">Time</th>
+          </tr>
+          {% for score in scores %}
+            <tr><th>{{score.name}}</th><th>{{score.score}}</th></tr>
+          {% endfor %}
+        </table>
     </div>
   </body>
 </html>

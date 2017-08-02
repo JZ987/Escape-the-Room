@@ -201,6 +201,24 @@ function chestAction(){
 function doorAction(){
   myText.text = "Your time is: " + myGameArea.frameNo;
   myGameArea.stop();
+  saveScore(myGameArea.frameNo)
+}
+
+function saveScore(score){
+  var url = "/savescore"
+  var settings = {"type" : "POST",
+                  "data" : {"score" : score}
+  }
+  jQuery.ajax(url, settings)
+}
+
+function enterName(event){
+  console.log("enterName")
+  if (event.keyCode == 13) //enter key code = 13
+    {
+      myGameArea['name'] = document.getElementById('textinput').text
+      $('#textinput').replacewith("Welcome, " + myGameArea['name'] + "!")
+    }
 }
 
 function textMessage(font, color, x, y){

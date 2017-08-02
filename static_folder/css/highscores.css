@@ -24,6 +24,15 @@ button {
   left: 10px;
 }
 
+table {
+  font-size: 175%;
+  margin: auto;
+}
+
+th {
+  padding: 0 20px;
+}
+
 #highscorebox {
   height: 700px;
   width: 800px;
