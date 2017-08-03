@@ -24,6 +24,10 @@ from google.appengine.ext import ndb
 jinja_environment = jinja2.Environment(loader=
     jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
+class Users(ndb.Model):
+    email = ndb.StringProperty()
+    username = ndb.StringProperty()
+
 class Scores(ndb.Model):
     name = ndb.StringProperty()
     score = ndb.IntegerProperty()
@@ -32,15 +36,26 @@ class MainHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
         if user:
-            greeting = ('Welcome, %s! (<a href="%s">Sign out</a>)' %
-                (user.nickname(), users.create_logout_url('/')))
+            query = Users.query(user.nickname() == Users.email)
+            userobjects = query.fetch()
+            if len(userobjects) > 0:
+                knownusername = userobjects[0].username
+                form = False
+                greeting = ('Welcome, <span id="username">%s</span>! (<a href="%s">Sign out</a>)' %
+                    (knownusername, users.create_logout_url('/')))
+            else:
+                form = True
+                greeting = ('Welcome, <span id="username">%s</span>! (<a href="%s">Sign out</a>)' %
+                    (user.nickname(), users.create_logout_url('/')))
         else:
+            form = False
             greeting = ('<a href="%s">Sign in</a>' %
                 users.create_login_url('/'))
 
         loginlink = (
             '<html><body>{}</body></html>'.format(greeting))
-        my_vars = { "loginlink": loginlink}
+        my_vars = { "loginlink": loginlink,
+                    "shoulddisplayform": form}
         template = jinja_environment.get_template('templates/index.html')
         self.response.write(template.render(my_vars))
 
@@ -59,20 +74,37 @@ class InstructionsHandler(webapp2.RequestHandler):
 class SaveScoreHandler(webapp2.RequestHandler):
     def post(self):
         user = users.get_current_user()
-        score = self.request.get('score')
-        savescore = Scores(name=user.nickname(), score=int(score))
-        savescore.put()
+        if user:
+            score = self.request.get('score')
+            query = Users.query(user.nickname() == Users.email)
+            userobjects = query.fetch()
+            savescore = Scores(name=userobjects[0].username, score=int(score))
+            savescore.put()
+        else:
+            score = self.request.get('score')
+            savescore = Scores(name='Anonymous', score=int(score))
+            savescore.put()
 
 class HighScoreHandler(webapp2.RequestHandler):
     def get(self):
-        template_vars = {}
+        query = Scores.query().order(Scores.score)
+        highscores = query.fetch(limit=10)
+        template_vars = {"scores" : highscores}
         template = jinja_environment.get_template('templates/highscores.html')
         self.response.write(template.render(template_vars))
+
+class SaveUserNameHandler(webapp2.RequestHandler):
+    def post(self):
+        user = users.get_current_user()
+        username = self.request.get('username')
+        saveuser = Users(username=username, email=user.nickname())
+        saveuser.put()
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/game', GameHandler),
     ('/instructions', InstructionsHandler),
     ('/highscores', HighScoreHandler),
-    ('/savescore', SaveScoreHandler)
+    ('/savescore', SaveScoreHandler),
+    ('/saveusername', SaveUserNameHandler)
 ], debug=True)

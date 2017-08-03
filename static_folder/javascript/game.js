@@ -306,6 +306,14 @@ function chestAction(){
   });
 }
 
+function saveScore(score){
+  var url = "/savescore"
+  var settings = {"type" : "POST",
+                  "data" : {"score" : score}
+  }
+  jQuery.ajax(url, settings)
+}
+
 function doorAction(){
   myText.text = "This is the door leading outside. There's a question on this: 'Who am I?'";
   $("#doorInput").show();
@@ -314,8 +322,9 @@ function doorAction(){
         e.preventDefault();
         var code2 = $("#doorInput").val();
         if(code2.toLowerCase() == "mark"){
-          myText.text = "Congradulation! You completed the game! Your time is: " + myGameArea.frameNo;
+          myText.text = "Congratulations! You completed the game! Your time is: " + myGameArea.frameNo;
           // myGameArea.stop();
+          saveScore(myGameArea.frameNo)
         }else{
           myText.text = "Sorry. Wrong person. Please try again";
           $("#doorInput").val("");
