@@ -1,8 +1,10 @@
 var myPlayer, myText;
 var obstacles = [];
 var text = "Grace has been kidnapped in her sleep and locked in an unknown room. Gather the clues to discover who the culprit is and escape the room.";
-var quoteComplete = dresserComplete = pictureComplete = dreamCatcherComplete = safeComplete = false;
-//var text = "This is a picture of the sun. This text is for testing purposes. Good bye and have a nice day!"
+var quoteComplete = dresserComplete = pictureComplete = dreamCatcherComplete = false;
+var ORIGINAL_WIDTH = 1440;
+var ORIGINAL_HEIGHT = 826;
+var ratio = ORIGINAL_WIDTH/ORIGINAL_HEIGHT;
 
 function startGame() {
   myGameArea.start();
@@ -11,7 +13,6 @@ function startGame() {
   myText = new textMessage("15px Fantasy", "black", myGameArea.canvas.width-160, 40);
   //wallpaper
   for(var i = 10; i <= 1120; i+=80){
-    console.log(i);
     obstacles.push(new component(80, 150, "/resources/images/wallpaper.png", i, 10, "image"));
   }
   obstacles.push(
@@ -47,8 +48,10 @@ function startGame() {
     new component(131, 95, "/resources/images/dresser.png", 550, 90, "image", "dresser"),
     new component(10, 50, "#451411", 10, 400, "", "dreamcatcher"),
     new component(14, 17, "/resources/images/note.png", 600, 95, "image"),
-    new component(100, 15, "red", 300, myGameArea.canvas.height-15, "", "door"),
-    new component(55, 75, "/resources/images/chest side closed.png", myGameArea.canvas.width-365, 350, "image", "chest")
+    new component(20, 10, "#451411", 450, myGameArea.canvas.height-10, "", "quote"),
+    new component(100, 15, "red", 550, myGameArea.canvas.height-15, "", "door"),
+    new component(55, 75, "/resources/images/chest side closed.png", myGameArea.canvas.width-365, 350, "image", "chest"),
+    new component(50, 10, "#451411", 750, myGameArea.canvas.height-10, "", "picture")
   );
 }
 
@@ -62,7 +65,10 @@ var myGameArea = {
       this.frameNo = 0;
       this.interval = setInterval(updateGameArea, 20);
       window.addEventListener('keydown', function (e) {
-        e.preventDefault();
+        if(e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 32){
+          hideObjects();
+          e.preventDefault();
+        }
         myGameArea.keys = (myGameArea.keys || []);
         myGameArea.keys[e.keyCode] = (e.type == "keydown");
       })
@@ -76,6 +82,14 @@ var myGameArea = {
   stop : function() {
       clearInterval(this.interval);
   }
+}
+
+function hideObjects(){
+  $("#chestInput").hide();
+  $("#doorInput").hide();
+  $("#dreamcatcher").hide();
+  $("#numberpad").hide();
+  $("#codeNote").hide();
 }
 
 function loadImages(){
@@ -124,7 +138,7 @@ function component(width, height, color, x, y, type, name) {
       if(this.name == "piano"){
         myText.text = "This is a piano. I don't know how to play it though.";
       }else if(this.name == "dresser"){
-        myText.text = "This is a really ugly dresser. There's dust everywhere.";
+        dresserAction();
       }else if(this.name == "clock"){
         myText.text = "This is a grandfather clock. The ticking is really annoying.";
       }else if(this.name == "closet"){
@@ -132,11 +146,15 @@ function component(width, height, color, x, y, type, name) {
       }else if(this.name == "bed"){
         myText.text = "This is the bed. Do you want to sleep in it? (You can't since there's no sleep feature :P)";
       }else if(this.name == "dreamcatcher"){
-        myText.text = "This is a dream catcher. It looks really creepy...";
+        dreamCatcherAction();
       }else if(this.name == "chest"){
         chestAction();
       }else if(this.name == "door"){
         doorAction();
+      }else if(this.name == "picture"){
+        pictureAction();
+      }else if(this.name == "quote"){
+        quoteAction();
       }
       this.activated = false;
     }
@@ -144,7 +162,7 @@ function component(width, height, color, x, y, type, name) {
       this.x += this.speedX;
       this.y += this.speedY;
       if(this.speedX != 0 || this.speedY != 0){
-        if(myGameArea.frameNo % 40 <= 20){
+        if(myGameArea.frameNo % 30 <= 15){
           if(this.direction == "up"){
             this.image = girlBack2;
           }else if(this.direction == "down"){
@@ -193,14 +211,73 @@ function component(width, height, color, x, y, type, name) {
   }
 }
 
+function quoteAction(){
+  quoteComplete = true;
+  myText.text = "There's a quote on the wall: '6e sure to note the dress code.'";
+}
+
+function dresserAction(){
+  if(quoteComplete){
+    dresserComplete = true;
+    myText.text = "How did I not notice this before? There's a note on the dresser. It reads 'Dear Grace. The two of us are perfect 2gether. You are the light of my life. --Anonymous'";
+  }else{
+    myText.text = "A plain dresser. Nothing interesting.";
+  }
+}
+function pictureAction(){
+  if(dresserComplete){
+    pictureComplete = true;
+    myText.text = "On the back of the portrait there's a message: '7 days a week, the sun rises. At night, the sun sets in the west. Sweet dreams'";
+  }else{
+    myText.text = "A portrait of the sun.";
+  }
+}
+
+function dreamCatcherAction(){
+  if(pictureComplete){
+    $("#dreamcatcher").show();
+    $("#dreamcatcherItem").show();
+  }else{
+    myText.text = "This is a dream catcher. It looks really creepy...";
+  }
+}
+
 function chestAction(){
   myText.text = "Please input the 4 digit number: ";
-
+  $("#chestInput").show();
+  $('#chestInput').keypress(function(e){
+      if(e.keyCode == 13){
+        e.preventDefault();
+        var code = $("#chestInput").val();
+        if(code == "6275"){
+          $("#numberpad").show();
+          $("#numberpadItem").show();
+          $("#codeNote").show();
+          $("#codeNoteItem").show();
+        }else{
+          myText.text = "Sorry. Wrong code. Please try again";
+          $("#chestInput").val("");
+        }
+      }
+  });
 }
 
 function doorAction(){
-  myText.text = "Your time is: " + myGameArea.frameNo;
-  myGameArea.stop();
+  myText.text = "Who am I?";
+  $("#doorInput").show();
+  $('#doorInput').keypress(function(e){
+      if(e.keyCode == 13){
+        e.preventDefault();
+        var code2 = $("#doorInput").val();
+        if(code2.toLowerCase() == "mark"){
+          myText.text = "Congradulation! You completed the game! Your time is: " + myGameArea.frameNo;
+          // myGameArea.stop();
+        }else{
+          myText.text = "Sorry. Wrong person. Please try again";
+          $("#doorInput").val("");
+        }
+      }
+  });
 }
 
 function textMessage(font, color, x, y){
@@ -210,7 +287,7 @@ function textMessage(font, color, x, y){
   var new_line = words[0];
   var lines = [];
   for(var i = 1; i < words.length; i+=1) {
-    if (ctx.measureText(new_line + " " + words[i]).width < 250) {
+    if (ctx.measureText(new_line + " " + words[i]).width < 225) {
       new_line += " " + words[i];
     } else {
       lines.push(new_line);
@@ -224,14 +301,14 @@ function textMessage(font, color, x, y){
   this.x = x;
   this.y = y;
   this.update = function(){
-    this.y = 40;
+    this.y = 50;
     ctx = myGameArea.context;
     if(rewriteMessage()){
       var words = this.text.split(" ");
       var new_line = words[0];
       var lines = [];
       for(var i = 1; i < words.length; i+=1) {
-        if (ctx.measureText(new_line + " " + words[i]).width < 250) {
+        if (ctx.measureText(new_line + " " + words[i]).width < 225) {
           new_line += " " + words[i];
         } else {
           lines.push(new_line);
@@ -338,6 +415,9 @@ function updateGameArea() {
     }
   }
   myText.update();
+  $("#dreamcatcherItem").click(dreamCatcherAction);
+  $("#numberpadItem").click(function(){$("#numberpad").show();});
+  $("#codeNoteItem").click(function(){$("#codeNote").show();});
   // var t1 = performance.now();
   // console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
 }
