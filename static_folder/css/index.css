@@ -48,6 +48,10 @@ button:active {
   transform: translateY(4px);
 }
 
+button:focus {
+  outline: 0;
+}
+
 a:link {
   text-decoration: none;
 }
@@ -63,4 +67,10 @@ a:link {
 #boxofbuttons {
   justify-content: center;
   display: flex;
+}
+
+#nameinput {
+  font-size: 16px;
+  width: 100px;
+  height: 20px;
 }
