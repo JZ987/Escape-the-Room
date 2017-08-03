@@ -13,15 +13,21 @@ function startGame() {
         e.preventDefault();
         var code2 = $("#doorInput").val();
         if(code2.toLowerCase() == "mark"){
-          myText.text = "Congradulation! You completed the game! Your time is: " + Math.round(myGameArea.frameNo/50) + " seconds!";
-          // myGameArea.stop();
+          myText.font = 30*ratio + "px Fantasy";
+          myText.spacing = 40;
+          myText.text = "Congratulations! Your time is: " + Math.round(myGameArea.frameNo/50) + " seconds!";
+          $("#win").fadeIn(2000);
+          document.head.innerHTML += '<audio src="/resources/music/laugh.mp3" autoplay></audio>';
           saveScore(Math.round(myGameArea.frameNo/50));
+          setTimeout(function(){window.location.href = "/highscores";}, 4000);
         }else{
           myText.text = "Sorry. Wrong person. Please try again";
           $("#doorInput").val("");
         }
       }
   });
+  $("#home").click(function(){window.location.href = "/";});
+  $("#restart").click(function(){window.location.href = "/game";});
   myGameArea.start();
   adjustPlayArea();
   loadImages();
@@ -84,6 +90,10 @@ var myGameArea = {
           hideObjects();
           e.preventDefault();
         }
+        if(e.keyCode == 27){
+          e.preventDefault();
+          $("#menu").show();
+        }
         myGameArea.keys = (myGameArea.keys || []);
         myGameArea.keys[e.keyCode] = (e.type == "keydown");
       })
@@ -108,6 +118,7 @@ function hideObjects(){
   $("#quote").hide();
   $("#portrait").hide();
   $("#note").hide();
+  $("#menu").hide();
 }
 
 function loadImages(){
@@ -158,6 +169,9 @@ function adjustPlayArea(){
   $("#sparkle2").css({"width":108*ratio+"px","height":110*ratio+"px",left:440*ratio+"px",top:790*ratio+"px"});
   $("#sparkle3").css({"width":108*ratio+"px","height":110*ratio+"px",left:550*ratio+"px",top:790*ratio+"px"});
   $("#sparkle4").css({"width":108*ratio+"px","height":110*ratio+"px",left:725*ratio+"px",top:790*ratio+"px"});
+  $("#win").css({"width":610.5*ratio+"px","height":630*ratio+"px",left:254.75*ratio+"px",top:88*ratio+"px"});
+  $("#home").css({"font-size":50*ratio+"px",top:300*ratio+"px",left:600*ratio+"px"});
+  $("#restart").css({"font-size":50*ratio+"px",top:400*ratio+"px",left:640*ratio+"px"});
 }
 
 function component(width, height, color, x, y, type, name) {
@@ -374,6 +388,7 @@ function textMessage(font, color, x, y){
   this.color = color;
   this.x = x;
   this.y = y;
+  this.spacing = 20;
   this.update = function(){
     this.y = 50*ratio;
     ctx = myGameArea.context;
@@ -397,7 +412,7 @@ function textMessage(font, color, x, y){
     ctx.textAlign = "center";
     for(var i = 0; i < this.lines.length; i+=1){
       ctx.fillText(this.lines[i], this.x, this.y);
-      this.y += 20*ratio;
+      this.y += this.spacing*ratio;
     }
   }
 }
