@@ -15,49 +15,49 @@ canvas{
   background-position: left;
 }
 
+img{
+  position: absolute;
+  display: none;
+}
+
 #chestInput{
   position: absolute;
   font-family: arial;
+  border: 2px black solid;
   display: none;
 }
 
 #doorInput{
   position: absolute;
   font-family: arial;
-  display: none;
-}
-/*
-#dreamcatcher{
-  position: absolute;
+  border: 2px black solid;
   display: none;
 }
 
-#dreamcatcherItem{
+#sparkle1{
   position: absolute;
-  display: none;
+  left: -70px;
+  top: 275px;
+  display: block;
 }
 
-#numberpad{
+#sparkle2{
   position: absolute;
-  display: none;
+  left: 440px;
+  top: 790px;
+  display: block;
 }
 
-#numberpadItem{
+#sparkle3{
   position: absolute;
-  display: none;
+  left: 550;
+  top: 790px;
+  display: block;
 }
 
-#codeNote{
+#sparkle4{
   position: absolute;
-  display: none;
-}
-
-#codeNoteItem{
-  position: absolute;
-  display: none;
-}*/
-
-img{
-  position: absolute;
-  display: none;
+  left: 725px;
+  top: 790px;
+  display: block;
 }

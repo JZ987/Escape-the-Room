@@ -2,12 +2,26 @@ var myPlayer, myText;
 var obstacles = [];
 var pianoObject;
 var text = "Grace has been kidnapped in her sleep and locked in an unknown room! Gather the clues to discover who the culprit is and escape the room.";
-var quoteComplete = dresserComplete = pictureComplete = dreamCatcherComplete = false;
+var quoteComplete = dresserComplete = pictureComplete = dreamCatcherComplete = chestComplete = false;
 var ORIGINAL_WIDTH = 1440;
 var ORIGINAL_HEIGHT = 826;
 var ratio;
 
 function startGame() {
+  $('#doorInput').keypress(function(e){
+      if(e.keyCode == 13){
+        e.preventDefault();
+        var code2 = $("#doorInput").val();
+        if(code2.toLowerCase() == "mark"){
+          myText.text = "Congradulation! You completed the game! Your time is: " + Math.round(myGameArea.frameNo/50) + " seconds!";
+          // myGameArea.stop();
+          saveScore(Math.round(myGameArea.frameNo/50));
+        }else{
+          myText.text = "Sorry. Wrong person. Please try again";
+          $("#doorInput").val("");
+        }
+      }
+  });
   myGameArea.start();
   adjustPlayArea();
   loadImages();
@@ -47,7 +61,7 @@ function startGame() {
     //key objects
     new component(131*ratio, 95*ratio, "/resources/images/dresser.png", 550*ratio, 90*ratio, "image", "dresser"),
     new component(15*ratio, 75*ratio, "#451411", 0, 300*ratio, "", "dreamcatcher"),
-    new component(14*ratio, 17*ratio, "/resources/images/note.png", 600*ratio, 95*ratio, "image"),
+    new component(14*ratio, 17*ratio, "/resources/images/note.png", 600*ratio, 95*ratio, "image", "note"),
     new component(40*ratio, 15*ratio, "gold", 450*ratio, myGameArea.canvas.height-(15*ratio), "", "quote"),
     new component(100*ratio, 15*ratio, "red", 550*ratio, myGameArea.canvas.height-(15*ratio), "", "door"),
     new component(55*ratio, 75*ratio, "/resources/images/chest side closed.png", myGameArea.canvas.width-(365*ratio), 350*ratio, "image", "chest"),
@@ -112,6 +126,7 @@ function loadImages(){
   clock = new Image(); clock.src = "/resources/images/clock.png";
   clock2 = new Image(); clock2.src = "/resources/images/clock 2.png";
   clock3 = new Image(); clock3.src = "/resources/images/clock 3.png";
+  chestOpen = new Image(); chestOpen.src = "/resources/images/chest side open.png";
 }
 
 function adjustPlayArea(){
@@ -139,6 +154,10 @@ function adjustPlayArea(){
   $("#numberpadItem").css({"width":128*ratio+"px","height":175.2*ratio+"px",left:1292.36*ratio+"px",top:626.02*ratio+"px"});
   $("#codeNote").css({"width":158*ratio+"px","height":198*ratio+"px",left:442*ratio+"px",top:304*ratio+"px"});
   $("#codeNoteItem").css({"width":138.25*ratio+"px","height":173.25*ratio+"px",left:1145*ratio+"px",top:627.97*ratio+"px"});
+  $("#sparkle1").css({"width":108*ratio+"px","height":110*ratio+"px",left:-70*ratio+"px",top:275*ratio+"px"});
+  $("#sparkle2").css({"width":108*ratio+"px","height":110*ratio+"px",left:440*ratio+"px",top:790*ratio+"px"});
+  $("#sparkle3").css({"width":108*ratio+"px","height":110*ratio+"px",left:550*ratio+"px",top:790*ratio+"px"});
+  $("#sparkle4").css({"width":108*ratio+"px","height":110*ratio+"px",left:725*ratio+"px",top:790*ratio+"px"});
 }
 
 function component(width, height, color, x, y, type, name) {
@@ -187,11 +206,13 @@ function component(width, height, color, x, y, type, name) {
       }else if(this.name == "quote"){
         quoteAction();
       }else if(this.name == "nightstand"){
-        myText.text = "Looks like a boring nightstand. It have a lamp and several books on it.";
+        myText.text = "Looks like a boring nightstand. It has a lamp and several books on it.";
       }else if(this.name == "randompainting1"){
         myText.text = "A painting of a street view of Venice";
       }else if(this.name == "chair"){
         myText.text = "Several chairs surrounding a huge table. What is this for?";
+      }else if(this.name == "table"){
+        myText.text = "This table is really old...smells weird as well.";
       }
       this.activated = false;
     }
@@ -238,6 +259,15 @@ function component(width, height, color, x, y, type, name) {
           this.image = clock;
         }else{
           this.image = clock3;
+        }
+      }else if(this.name == "chest"){
+        if(chestComplete){
+          this.image = chestOpen;
+        }
+      }else if(this.name == "note"){
+        if(dresserComplete){
+          this.width = 0;
+          this.height = 0;
         }
       }
       ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
@@ -287,23 +317,28 @@ function dreamCatcherAction(){
 }
 
 function chestAction(){
-  myText.text = "Please input the 4 digit number: ";
-  $("#chestInput").show();
-  $('#chestInput').keypress(function(e){
-      if(e.keyCode == 13){
-        e.preventDefault();
-        var code = $("#chestInput").val();
-        if(code == "6275"){
-          $("#numberpad").show();
-          $("#numberpadItem").show();
-          $("#codeNote").show();
-          $("#codeNoteItem").show();
-        }else{
-          myText.text = "Sorry. Wrong code. Please try again";
-          $("#chestInput").val("");
+  if(chestComplete){
+    myText.text = "There's nothing inside here anymore...";
+  }else{
+    myText.text = "Please input the 4 digit number: ";
+    $("#chestInput").show();
+    $('#chestInput').keypress(function(e){
+        if(e.keyCode == 13){
+          e.preventDefault();
+          var code = $("#chestInput").val();
+          if(code == "6275"){
+            $("#numberpad").show();
+            $("#numberpadItem").show();
+            $("#codeNote").show();
+            $("#codeNoteItem").show();
+            chestComplete = true;
+          }else{
+            myText.text = "Sorry. Wrong code. Please try again";
+            $("#chestInput").val("");
+          }
         }
-      }
-  });
+    });
+  }
 }
 
 function saveScore(score){
@@ -317,20 +352,6 @@ function saveScore(score){
 function doorAction(){
   myText.text = "This is the door leading outside. There's a question on this: 'Who am I?'";
   $("#doorInput").show();
-  $('#doorInput').keypress(function(e){
-      if(e.keyCode == 13){
-        e.preventDefault();
-        var code2 = $("#doorInput").val();
-        if(code2.toLowerCase() == "mark"){
-          myText.text = "Congratulations! You completed the game! Your time is: " + myGameArea.frameNo;
-          // myGameArea.stop();
-          saveScore(myGameArea.frameNo)
-        }else{
-          myText.text = "Sorry. Wrong person. Please try again";
-          $("#doorInput").val("");
-        }
-      }
-  });
 }
 
 function textMessage(font, color, x, y){
@@ -400,10 +421,15 @@ function checkCollision(otherobj, speedX, speedY){
     var otherright = otherobj.x + (otherobj.width);
     var othertop = otherobj.y + 95*ratio;
     var otherbottom = otherobj.y + 95*ratio + (otherobj.height);
-  }else if(otherobj.name == "chair1"){
+  }else if(otherobj.name == "dreamcatcher"){
+    var otherleft = otherobj.x;
+    var otherright = otherobj.x + (otherobj.width) - 5*ratio;
+    var othertop = otherobj.y;
+    var otherbottom = otherobj.y + (otherobj.height) + 50*ratio;
+  }else if(otherobj.name == "door" || otherobj.name == "quote" || otherobj.name == "picture"){
     var otherleft = otherobj.x;
     var otherright = otherobj.x + (otherobj.width);
-    var othertop = otherobj.y + 75*ratio;
+    var othertop = otherobj.y + 5*ratio;
     var otherbottom = otherobj.y + (otherobj.height);
   }else{
     var otherleft = otherobj.x;
@@ -486,14 +512,17 @@ function updateGameArea() {
         obstacles[i].activated = true;
       }
     }
+    if(checkActivableObjects(pianoObject)){
+      pianoObject.activated = true;
+    }
   }
   myText.update();
-  $("#dreamcatcherItem").click(function(){hideObjects();$("#dreamcatcher").show();});
-  $("#numberpadItem").click(function(){hideObjects();$("#numberpad").show();});
-  $("#codeNoteItem").click(function(){hideObjects();$("#codeNote").show();});
-  $("#portraitItem").click(function(){hideObjects();$("#portrait").show();});
-  $("#noteItem").click(function(){hideObjects();$("#note").show();});
-  $("#quoteItem").click(function(){hideObjects();$("#quote").show();});
+  $("#dreamcatcherItem").click(function(){$("#dreamcatcher").show();});
+  $("#numberpadItem").click(function(){$("#numberpad").show();});
+  $("#codeNoteItem").click(function(){$("#codeNote").show();});
+  $("#portraitItem").click(function(){$("#portrait").show();});
+  $("#noteItem").click(function(){$("#note").show();});
+  $("#quoteItem").click(function(){$("#quote").show();});
   // var t1 = performance.now();
   // console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
 }
