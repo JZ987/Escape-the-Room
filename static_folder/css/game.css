@@ -17,60 +17,33 @@ canvas{
 
 #chestInput{
   position: absolute;
-  left: 86.5%;
-  top: 18%;
   font-family: arial;
-  font-size: 30px;
-  width: 75px;
-  height: 34px;
   display: none;
 }
 
 #doorInput{
   position: absolute;
-  left: 86.5%;
-  top: 18%;
   font-family: arial;
-  font-size: 30px;
-  width: 75px;
-  height: 34px;
   display: none;
 }
 
 #dreamcatcher{
   position: absolute;
-  max-width: 60%;
-  max-height: 60%;
-  top: 0; bottom:0; left: 0; right:0;
-  margin: auto;
   display: none;
 }
 
 #dreamcatcherItem{
   position: absolute;
-  max-width: 20%;
-  max-height: 20%;
-  right: 2%;
-  bottom: 13%;
-  display: none;
+  /*display: none;*/
 }
 
 #numberpad{
   position: absolute;
-  max-width: 60%;
-  max-height: 60%;
-  top: 0; bottom:0; left: 300; right:0;
-  margin: auto;
-  display: none;
+  /*display: none;*/
 }
 
 #numberpadItem{
   position: absolute;
-  max-width: 20%;
-  max-height: 20%;
-  right: 1.5%;
-  bottom: 3%;
-  display: none;
 }
 
 #codeNote{

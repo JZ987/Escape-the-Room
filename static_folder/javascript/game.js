@@ -4,54 +4,56 @@ var text = "Grace has been kidnapped in her sleep and locked in an unknown room.
 var quoteComplete = dresserComplete = pictureComplete = dreamCatcherComplete = false;
 var ORIGINAL_WIDTH = 1440;
 var ORIGINAL_HEIGHT = 826;
-var ratio = ORIGINAL_WIDTH/ORIGINAL_HEIGHT;
+var ratio;
 
 function startGame() {
   myGameArea.start();
+  adjustPlayArea();
   loadImages();
-  myPlayer = new component(73, 149, girlBack, 550, 400, "player");
-  myText = new textMessage("15px Fantasy", "black", myGameArea.canvas.width-160, 40);
+  myPlayer = new component(73*ratio, 149*ratio, girlBack, 550*ratio, 400*ratio, "player");
+  myText = new textMessage(15*ratio + "px Fantasy", "black", myGameArea.canvas.width-(160*ratio), 40*ratio);
   //wallpaper
-  for(var i = 10; i <= 1120; i+=80){
-    obstacles.push(new component(80, 150, "/resources/images/wallpaper.png", i, 10, "image"));
+  for(var i = 10*ratio; i <= 1120*ratio; i+=80*ratio){
+    console.log(i);
+    obstacles.push(new component(80*ratio, 150*ratio, "/resources/images/wallpaper.png", i, 10*ratio, "image"));
   }
   obstacles.push(
     //boundaries
-    new component(300, myGameArea.canvas.height-265, "white", myGameArea.canvas.width-310, 265),
-    new component(10, myGameArea.canvas.height, "black", 0, 0), //left
-    new component(10, myGameArea.canvas.height, "black", myGameArea.canvas.width-310, 0), //right
-    new component(myGameArea.canvas.width-300, 10, "black", 0, 0), //top
-    new component(myGameArea.canvas.width, 10, "black", 0, myGameArea.canvas.height-10), //bottom
-    new component(300, 10, "black", myGameArea.canvas.width-300, 0),
-    new component(10, myGameArea.canvas.height, "black", myGameArea.canvas.width-10, 0),
-    new component(300, 265, "black", myGameArea.canvas.width-300, 0),
-    new component(myGameArea.canvas.width-300, 2, "black", 0, 160),
+    new component(300*ratio, myGameArea.canvas.height-(265*ratio), "white", myGameArea.canvas.width-(310*ratio), 265*ratio),
+    new component(10*ratio, myGameArea.canvas.height, "black", 0, 0), //left
+    new component(10*ratio, myGameArea.canvas.height, "black", myGameArea.canvas.width-(310*ratio), 0), //right
+    new component(myGameArea.canvas.width-(300*ratio), 10, "black", 0, 0), //top
+    new component(myGameArea.canvas.width, 10*ratio, "black", 0, myGameArea.canvas.height-(10*ratio)), //bottom
+    new component(300*ratio, 10*ratio, "black", myGameArea.canvas.width-(300*ratio), 0),
+    new component(10*ratio, myGameArea.canvas.height, "black", myGameArea.canvas.width-(10*ratio), 0),
+    new component(300*ratio, 265*ratio, "black", myGameArea.canvas.width-(300*ratio), 0),
+    new component(myGameArea.canvas.width-(300*ratio), 2*ratio, "black", 0, 160*ratio),
     //new component(10, 260, "black", myGameArea.canvas.width-315, 0),
     //new component(315, 150, "black", myGameArea.canvas.width-315, 260),
     //objects
-    new component(300, 250, "/resources/images/speech-bubble-md.png", myGameArea.canvas.width-305, 7, "image", "speech"),
-    new component(53, 200, clock, 25, 10, "image", "clock"),
-    new component(190, 200, "/resources/images/closet.png", 100, 10, "image", "closet"),
-    new component(190, 250, "/resources/images/piano.png", 200, 300, "image", "piano"),
-    new component(224, 284, "/resources/images/bed2.png", 725, 60, "image", "bed"),
-    new component(72, 125, "/resources/images/nightstand.png", 940, 70, "image", "nightstand"),
-    new component(46, 50, "/resources/images/random painting.png", 625, 20, "image"),
-    new component(60, 50, "/resources/images/random painting 2.png", 375, 20, "image"),
-    new component(53, 100, "/resources/images/chair.png", 815, 440, "image"),
-    new component(64, 100, "/resources/images/chair3.png", 710, 515, "image"),
-    new component(64, 100, "/resources/images/chair4.png", 900, 515, "image"),
-    new component(180, 150, "/resources/images/table.png", 750, 500, "image", "table"),
-    new component(53, 91, "/resources/images/chair2.png", 815, 615, "image"),
-    new component(38, 50, "/resources/images/candlestick.png", 820, 525, "image"),
+    new component(300*ratio, 250*ratio, "/resources/images/speech-bubble-md.png", myGameArea.canvas.width-(305*ratio), 7*ratio, "image", "speech"),
+    new component(53*ratio, 200*ratio, clock, 25*ratio, 10*ratio, "image", "clock"),
+    new component(190*ratio, 200*ratio, "/resources/images/closet.png", 100*ratio, 10*ratio, "image", "closet"),
+    new component(190*ratio, 250*ratio, "/resources/images/piano.png", 200*ratio, 300*ratio, "image", "piano"),
+    new component(224*ratio, 284*ratio, "/resources/images/bed2.png", 725*ratio, 60*ratio, "image", "bed"),
+    new component(72*ratio, 125*ratio, "/resources/images/nightstand.png", 940*ratio, 70*ratio, "image", "nightstand"),
+    new component(46*ratio, 50*ratio, "/resources/images/random painting.png", 625*ratio, 20*ratio, "image"),
+    new component(60*ratio, 50*ratio, "/resources/images/random painting 2.png", 375*ratio, 20*ratio, "image"),
+    new component(53*ratio, 100*ratio, "/resources/images/chair.png", 815*ratio, 440*ratio, "image"),
+    new component(64*ratio, 100*ratio, "/resources/images/chair3.png", 710*ratio, 515*ratio, "image"),
+    new component(64*ratio, 100*ratio, "/resources/images/chair4.png", 900*ratio, 515*ratio, "image"),
+    new component(180*ratio, 150*ratio, "/resources/images/table.png", 750*ratio, 500*ratio, "image", "table"),
+    new component(53*ratio, 91*ratio, "/resources/images/chair2.png", 815*ratio, 615*ratio, "image"),
+    new component(38*ratio, 50*ratio, "/resources/images/candlestick.png", 820*ratio, 525*ratio, "image"),
 
     //key objects
-    new component(131, 95, "/resources/images/dresser.png", 550, 90, "image", "dresser"),
-    new component(10, 50, "#451411", 10, 400, "", "dreamcatcher"),
-    new component(14, 17, "/resources/images/note.png", 600, 95, "image"),
-    new component(20, 10, "#451411", 450, myGameArea.canvas.height-10, "", "quote"),
-    new component(100, 15, "red", 550, myGameArea.canvas.height-15, "", "door"),
-    new component(55, 75, "/resources/images/chest side closed.png", myGameArea.canvas.width-365, 350, "image", "chest"),
-    new component(50, 10, "#451411", 750, myGameArea.canvas.height-10, "", "picture")
+    new component(131*ratio, 95*ratio, "/resources/images/dresser.png", 550*ratio, 90*ratio, "image", "dresser"),
+    new component(10*ratio, 50*ratio, "#451411", 10*ratio, 400*ratio, "", "dreamcatcher"),
+    new component(14*ratio, 17*ratio, "/resources/images/note.png", 600*ratio, 95*ratio, "image"),
+    new component(20*ratio, 10*ratio, "#451411", 450*ratio, myGameArea.canvas.height-(10*ratio), "", "quote"),
+    new component(100*ratio, 15*ratio, "red", 550*ratio, myGameArea.canvas.height-(15*ratio), "", "door"),
+    new component(55*ratio, 75*ratio, "/resources/images/chest side closed.png", myGameArea.canvas.width-(365*ratio), 350*ratio, "image", "chest"),
+    new component(50*ratio, 10*ratio, "#451411", 750*ratio, myGameArea.canvas.height-(10*ratio), "", "picture")
   );
 }
 
@@ -108,6 +110,25 @@ function loadImages(){
   clock = new Image(); clock.src = "/resources/images/clock.png";
   clock2 = new Image(); clock2.src = "/resources/images/clock 2.png";
   clock3 = new Image(); clock3.src = "/resources/images/clock 3.png";
+}
+
+function adjustPlayArea(){
+  if(myGameArea.canvas.width >= (myGameArea.canvas.height*(ORIGINAL_WIDTH/ORIGINAL_HEIGHT))){
+    var dimension_ratio = myGameArea.canvas.height/ORIGINAL_HEIGHT;
+    var new_width = ORIGINAL_WIDTH*dimension_ratio;
+    myGameArea.canvas.width = new_width;
+  }else{
+    var dimension_ratio = myGameArea.canvas.width/ORIGINAL_WIDTH;
+    var new_height = ORIGINAL_HEIGHT*dimension_ratio;
+    myGameArea.canvas.height = new_height;
+  }
+  ratio = myGameArea.canvas.width/ORIGINAL_WIDTH;
+  $("#chestInput").css({"font-size":30*ratio+"px","width":75*ratio+"px","height":34*ratio+"px",left:1245.6*ratio+"px",top:148.68*ratio+"px"});
+  $("#doorInput").css({"font-size":30*ratio+"px","width":75*ratio+"px","height":34*ratio+"px",left:1245.6*ratio+"px",top:148.68*ratio+"px"});
+  $("#dreamcatcher").css({"width":271.2*ratio+"px","height":384*ratio+"px",left:584.4*ratio+"px",top:221*ratio+"px"});
+  $("#dreamcatcherItem").css({"width":122.04*ratio+"px","height":172.8*ratio+"px",left:1296.36*ratio+"px",top:446.7*ratio+"px"});
+  $("#numberpad").css({"width":256*ratio+"px","height":350.4*ratio+"px",left:700*ratio+"px",top:237.8*ratio+"px"});
+  $("#numberpadItem").css({"width":128*ratio+"px","height":175.2*ratio+"px",left:1292.36*ratio+"px",top:626.02*ratio+"px"});
 }
 
 function component(width, height, color, x, y, type, name) {
@@ -287,7 +308,7 @@ function textMessage(font, color, x, y){
   var new_line = words[0];
   var lines = [];
   for(var i = 1; i < words.length; i+=1) {
-    if (ctx.measureText(new_line + " " + words[i]).width < 225) {
+    if (ctx.measureText(new_line + " " + words[i]).width < (225*ratio)) {
       new_line += " " + words[i];
     } else {
       lines.push(new_line);
@@ -301,14 +322,14 @@ function textMessage(font, color, x, y){
   this.x = x;
   this.y = y;
   this.update = function(){
-    this.y = 50;
+    this.y = 50*ratio;
     ctx = myGameArea.context;
     if(rewriteMessage()){
       var words = this.text.split(" ");
       var new_line = words[0];
       var lines = [];
       for(var i = 1; i < words.length; i+=1) {
-        if (ctx.measureText(new_line + " " + words[i]).width < 225) {
+        if (ctx.measureText(new_line + " " + words[i]).width < (225*ratio)) {
           new_line += " " + words[i];
         } else {
           lines.push(new_line);
@@ -323,7 +344,7 @@ function textMessage(font, color, x, y){
     ctx.textAlign = "center";
     for(var i = 0; i < this.lines.length; i+=1){
       ctx.fillText(this.lines[i], this.x, this.y);
-      this.y += 20;
+      this.y += 20*ratio;
     }
   }
 }
@@ -333,14 +354,14 @@ function rewriteMessage(){
 }
 
 function checkCollision(otherobj, speedX, speedY){
-  var newleft = myPlayer.x + 10 + speedX;
-  var newright = newleft + 50;
-  var newtop = myPlayer.y + 110 + speedY;
-  var newbottom = newtop + 50;
+  var newleft = myPlayer.x + 10*ratio + speedX;
+  var newright = newleft + 50*ratio;
+  var newtop = myPlayer.y + 110*ratio + speedY;
+  var newbottom = newtop + 50*ratio;
   if(otherobj.name == "piano"){
     var otherleft = otherobj.x;
     var otherright = otherobj.x + (otherobj.width);
-    var othertop = otherobj.y + 10;
+    var othertop = otherobj.y + 10*ratio;
     var otherbottom = otherobj.y + (otherobj.height);
   }else{
     var otherleft = otherobj.x;
@@ -359,13 +380,13 @@ function checkActivableObjects(otherobj){
   var speedX = 0;
   var speedY = 0;
   if(myPlayer.direction == "left"){
-    speedX = -5;
+    speedX = -5*ratio;
   }else if(myPlayer.direction == "right"){
-    speedX = 5;
+    speedX = 5*ratio;
   }else if(myPlayer.direction == "up"){
-    speedY = -5;
+    speedY = -5*ratio;
   }else if(myPlayer.direction == "down"){
-    speedY = 5;
+    speedY = 5*ratio;
   }
   return checkCollision(otherobj, speedX, speedY);
 }
@@ -380,22 +401,22 @@ function updateGameArea() {
   myPlayer.speedX = 0;
   myPlayer.speedY = 0;
   if(myGameArea.keys && myGameArea.keys[37]){
-    myPlayer.speedX = -5;
+    myPlayer.speedX = -5*ratio;
     myPlayer.image = girlLeft;
     myPlayer.direction = "left";
   }
   if(myGameArea.keys && myGameArea.keys[39]){
-    myPlayer.speedX = 5;
+    myPlayer.speedX = 5*ratio;
     myPlayer.image = girlRight;
     myPlayer.direction = "right";
   }
   if(myGameArea.keys && myGameArea.keys[38]){
-    myPlayer.speedY = -5;
+    myPlayer.speedY = -5*ratio;
     myPlayer.image = girlBack;
     myPlayer.direction = "up";
   }
   if(myGameArea.keys && myGameArea.keys[40]){
-    myPlayer.speedY = 5;
+    myPlayer.speedY = 5*ratio;
     myPlayer.image = girlFront;
     myPlayer.direction = "down";
   }
@@ -415,7 +436,7 @@ function updateGameArea() {
     }
   }
   myText.update();
-  $("#dreamcatcherItem").click(dreamCatcherAction);
+  $("#dreamcatcherItem").click(function(){$("#dreamcatcher").show();});
   $("#numberpadItem").click(function(){$("#numberpad").show();});
   $("#codeNoteItem").click(function(){$("#codeNote").show();});
   // var t1 = performance.now();
