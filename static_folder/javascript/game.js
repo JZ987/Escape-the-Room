@@ -92,6 +92,9 @@ function hideObjects(){
   $("#dreamcatcher").hide();
   $("#numberpad").hide();
   $("#codeNote").hide();
+  $("#quote").hide();
+  $("#portrait").hide();
+  $("#note").hide();
 }
 
 function loadImages(){
@@ -125,6 +128,12 @@ function adjustPlayArea(){
   ratio = myGameArea.canvas.width/ORIGINAL_WIDTH;
   $("#chestInput").css({"font-size":30*ratio+"px","width":75*ratio+"px","height":34*ratio+"px",left:1245.6*ratio+"px",top:148.68*ratio+"px"});
   $("#doorInput").css({"font-size":30*ratio+"px","width":75*ratio+"px","height":34*ratio+"px",left:1245.6*ratio+"px",top:148.68*ratio+"px"});
+  $("#quote").css({"width":323.2*ratio+"px","height":384*ratio+"px",left:398.4*ratio+"px",top:211*ratio+"px"});
+  $("#quoteItem").css({"width":121.2*ratio+"px","height":144*ratio+"px",left:1153*ratio+"px",top:283*ratio+"px"});
+  $("#note").css({"width":262*ratio+"px","height":365*ratio+"px",left:429*ratio+"px",top:220.5*ratio+"px"});
+  $("#noteItem").css({"width":104.8*ratio+"px","height":146*ratio+"px",left:1305*ratio+"px",top:280*ratio+"px"});
+  $("#portrait").css({"width":458*ratio+"px","height":546*ratio+"px",left:331*ratio+"px",top:130*ratio+"px"});
+  $("#portraitItem").css({"width":137.4*ratio+"px","height":163.8*ratio+"px",left:1145*ratio+"px",top:450*ratio+"px"});
   $("#dreamcatcher").css({"width":316.4*ratio+"px","height":448*ratio+"px",left:396.8*ratio+"px",top:179*ratio+"px"});
   $("#dreamcatcherItem").css({"width":122.04*ratio+"px","height":172.8*ratio+"px",left:1296.36*ratio+"px",top:446.7*ratio+"px"});
   $("#numberpad").css({"width":256*ratio+"px","height":350.4*ratio+"px",left:700*ratio+"px",top:227.8*ratio+"px"});
@@ -242,13 +251,17 @@ function component(width, height, color, x, y, type, name) {
 
 function quoteAction(){
   quoteComplete = true;
-  myText.text = "There's a quote on the wall: '6e sure to note the dress code.'";
+  $("#quote").show();
+  $("#quoteItem").show();
+  myText.text = "Hmmm there's a quote on this frame...";
 }
 
 function dresserAction(){
   if(quoteComplete){
     dresserComplete = true;
-    myText.text = "How did I not notice this before? There's a note on the dresser. It reads 'Dear Grace. The two of us are perfect 2gether. You are the light of my life. --Anonymous'";
+    $("#note").show();
+    $("#noteItem").show();
+    myText.text = "How did I not notice this before? There's a note on the dresser!";
   }else{
     myText.text = "A plain dresser. Nothing interesting.";
   }
@@ -256,9 +269,11 @@ function dresserAction(){
 function pictureAction(){
   if(dresserComplete){
     pictureComplete = true;
-    myText.text = "On the back of the portrait there's a message: '7 days a week, the sun rises. At night, the sun sets in the west. Sweet dreams'";
+    $("#portrait").show();
+    $("#portraitItem").show();
+    myText.text = "There's message on the back of the portrait!!";
   }else{
-    myText.text = "A portrait of the sun.";
+    myText.text = "A portrait of the sun. It's blindingly bright somehow...";
   }
 }
 
@@ -266,6 +281,7 @@ function dreamCatcherAction(){
   if(pictureComplete){
     $("#dreamcatcher").show();
     $("#dreamcatcherItem").show();
+    myText.text = "....";
   }else{
     myText.text = "This is a dream catcher. It looks really creepy...";
   }
@@ -452,6 +468,9 @@ function updateGameArea() {
   $("#dreamcatcherItem").click(function(){$("#dreamcatcher").show();});
   $("#numberpadItem").click(function(){$("#numberpad").show();});
   $("#codeNoteItem").click(function(){$("#codeNote").show();});
+  $("#portraitItem").click(function(){$("#portrait").show();});
+  $("#noteItem").click(function(){$("#note").show();});
+  $("#quoteItem").click(function(){$("#quote").show();});
   // var t1 = performance.now();
   // console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
 }

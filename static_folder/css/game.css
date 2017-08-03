@@ -26,7 +26,7 @@ canvas{
   font-family: arial;
   display: none;
 }
-
+/*
 #dreamcatcher{
   position: absolute;
   display: none;
@@ -53,6 +53,11 @@ canvas{
 }
 
 #codeNoteItem{
+  position: absolute;
+  display: none;
+}*/
+
+img{
   position: absolute;
   display: none;
 }
