@@ -4,7 +4,6 @@ html, body{
   height: 100%;
   margin: 0px;
   padding: 0px;
-  background-color: black;
 }
 
 canvas{
@@ -14,4 +13,80 @@ canvas{
   background-image: url("/resources/images/hardwood.jpg");
   background-repeat: repeat;
   background-position: left;
+}
+
+#chestInput{
+  position: absolute;
+  left: 86.5%;
+  top: 18%;
+  font-family: arial;
+  font-size: 30px;
+  width: 75px;
+  height: 34px;
+  display: none;
+}
+
+#doorInput{
+  position: absolute;
+  left: 86.5%;
+  top: 18%;
+  font-family: arial;
+  font-size: 30px;
+  width: 75px;
+  height: 34px;
+  display: none;
+}
+
+#dreamcatcher{
+  position: absolute;
+  max-width: 60%;
+  max-height: 60%;
+  top: 0; bottom:0; left: 0; right:0;
+  margin: auto;
+  display: none;
+}
+
+#dreamcatcherItem{
+  position: absolute;
+  max-width: 20%;
+  max-height: 20%;
+  right: 2%;
+  bottom: 13%;
+  display: none;
+}
+
+#numberpad{
+  position: absolute;
+  max-width: 60%;
+  max-height: 60%;
+  top: 0; bottom:0; left: 300; right:0;
+  margin: auto;
+  display: none;
+}
+
+#numberpadItem{
+  position: absolute;
+  max-width: 20%;
+  max-height: 20%;
+  right: 1.5%;
+  bottom: 3%;
+  display: none;
+}
+
+#codeNote{
+  position: absolute;
+  max-width: 40%;
+  max-height: 40%;
+  top: 0; bottom: 0; left: 0; right: 500;
+  margin: auto;
+  display: none;
+}
+
+#codeNoteItem{
+  position: absolute;
+  max-width: 20%;
+  max-height: 20%;
+  right: 11%;
+  bottom: 3%;
+  display: none;
 }
