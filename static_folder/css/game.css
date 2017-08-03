@@ -4,7 +4,6 @@ html, body{
   height: 100%;
   margin: 0px;
   padding: 0px;
-  background-color: black;
 }
 
 canvas{
@@ -14,4 +13,46 @@ canvas{
   background-image: url("/resources/images/hardwood.jpg");
   background-repeat: repeat;
   background-position: left;
+}
+
+#chestInput{
+  position: absolute;
+  font-family: arial;
+  display: none;
+}
+
+#doorInput{
+  position: absolute;
+  font-family: arial;
+  display: none;
+}
+
+#dreamcatcher{
+  position: absolute;
+  display: none;
+}
+
+#dreamcatcherItem{
+  position: absolute;
+  display: none;
+}
+
+#numberpad{
+  position: absolute;
+  display: none;
+}
+
+#numberpadItem{
+  position: absolute;
+  display: none;
+}
+
+#codeNote{
+  position: absolute;
+  display: none;
+}
+
+#codeNoteItem{
+  position: absolute;
+  display: none;
 }
