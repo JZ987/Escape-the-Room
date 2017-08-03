@@ -11,7 +11,7 @@ function startGame() {
   adjustPlayArea();
   loadImages();
   myPlayer = new component(73*ratio, 149*ratio, girlBack, 550*ratio, 400*ratio, "player");
-  myText = new textMessage(15*ratio + "px Fantasy", "black", myGameArea.canvas.width-(160*ratio), 40*ratio);
+  myText = new textMessage(15*ratio + "px Fantasy", "red", myGameArea.canvas.width-(160*ratio), 40*ratio);
   //wallpaper
   for(var i = 10*ratio; i <= 1120*ratio; i+=80*ratio){
     console.log(i);
@@ -38,22 +38,22 @@ function startGame() {
     new component(224*ratio, 284*ratio, "/resources/images/bed2.png", 725*ratio, 60*ratio, "image", "bed"),
     new component(72*ratio, 125*ratio, "/resources/images/nightstand.png", 940*ratio, 70*ratio, "image", "nightstand"),
     new component(46*ratio, 50*ratio, "/resources/images/random painting.png", 625*ratio, 20*ratio, "image"),
-    new component(60*ratio, 50*ratio, "/resources/images/random painting 2.png", 375*ratio, 20*ratio, "image"),
-    new component(53*ratio, 100*ratio, "/resources/images/chair.png", 815*ratio, 440*ratio, "image"),
-    new component(64*ratio, 100*ratio, "/resources/images/chair3.png", 710*ratio, 515*ratio, "image"),
-    new component(64*ratio, 100*ratio, "/resources/images/chair4.png", 900*ratio, 515*ratio, "image"),
+    new component(60*ratio, 50*ratio, "/resources/images/random painting 2.png", 375*ratio, 20*ratio, "image", "randompainting1"),
+    new component(53*ratio, 100*ratio, "/resources/images/chair.png", 815*ratio, 440*ratio, "image", "chair"),
+    new component(64*ratio, 100*ratio, "/resources/images/chair3.png", 710*ratio, 515*ratio, "image", "chair"),
+    new component(64*ratio, 100*ratio, "/resources/images/chair4.png", 900*ratio, 515*ratio, "image", "chair"),
     new component(180*ratio, 150*ratio, "/resources/images/table.png", 750*ratio, 500*ratio, "image", "table"),
-    new component(53*ratio, 91*ratio, "/resources/images/chair2.png", 815*ratio, 615*ratio, "image"),
+    new component(53*ratio, 91*ratio, "/resources/images/chair2.png", 815*ratio, 615*ratio, "image", "chair"),
     new component(38*ratio, 50*ratio, "/resources/images/candlestick.png", 820*ratio, 525*ratio, "image"),
 
     //key objects
     new component(131*ratio, 95*ratio, "/resources/images/dresser.png", 550*ratio, 90*ratio, "image", "dresser"),
-    new component(10*ratio, 50*ratio, "#451411", 10*ratio, 400*ratio, "", "dreamcatcher"),
+    new component(15*ratio, 75*ratio, "#451411", 0, 300*ratio, "", "dreamcatcher"),
     new component(14*ratio, 17*ratio, "/resources/images/note.png", 600*ratio, 95*ratio, "image"),
-    new component(20*ratio, 10*ratio, "#451411", 450*ratio, myGameArea.canvas.height-(10*ratio), "", "quote"),
+    new component(40*ratio, 15*ratio, "gold", 450*ratio, myGameArea.canvas.height-(15*ratio), "", "quote"),
     new component(100*ratio, 15*ratio, "red", 550*ratio, myGameArea.canvas.height-(15*ratio), "", "door"),
     new component(55*ratio, 75*ratio, "/resources/images/chest side closed.png", myGameArea.canvas.width-(365*ratio), 350*ratio, "image", "chest"),
-    new component(50*ratio, 10*ratio, "#451411", 750*ratio, myGameArea.canvas.height-(10*ratio), "", "picture")
+    new component(50*ratio, 15*ratio, "gold", 750*ratio, myGameArea.canvas.height-(15*ratio), "", "picture")
   );
 }
 
@@ -125,10 +125,12 @@ function adjustPlayArea(){
   ratio = myGameArea.canvas.width/ORIGINAL_WIDTH;
   $("#chestInput").css({"font-size":30*ratio+"px","width":75*ratio+"px","height":34*ratio+"px",left:1245.6*ratio+"px",top:148.68*ratio+"px"});
   $("#doorInput").css({"font-size":30*ratio+"px","width":75*ratio+"px","height":34*ratio+"px",left:1245.6*ratio+"px",top:148.68*ratio+"px"});
-  $("#dreamcatcher").css({"width":271.2*ratio+"px","height":384*ratio+"px",left:584.4*ratio+"px",top:221*ratio+"px"});
+  $("#dreamcatcher").css({"width":316.4*ratio+"px","height":448*ratio+"px",left:396.8*ratio+"px",top:179*ratio+"px"});
   $("#dreamcatcherItem").css({"width":122.04*ratio+"px","height":172.8*ratio+"px",left:1296.36*ratio+"px",top:446.7*ratio+"px"});
-  $("#numberpad").css({"width":256*ratio+"px","height":350.4*ratio+"px",left:700*ratio+"px",top:237.8*ratio+"px"});
+  $("#numberpad").css({"width":256*ratio+"px","height":350.4*ratio+"px",left:700*ratio+"px",top:227.8*ratio+"px"});
   $("#numberpadItem").css({"width":128*ratio+"px","height":175.2*ratio+"px",left:1292.36*ratio+"px",top:626.02*ratio+"px"});
+  $("#codeNote").css({"width":158*ratio+"px","height":198*ratio+"px",left:442*ratio+"px",top:304*ratio+"px"});
+  $("#codeNoteItem").css({"width":138.25*ratio+"px","height":173.25*ratio+"px",left:1145*ratio+"px",top:627.97*ratio+"px"});
 }
 
 function component(width, height, color, x, y, type, name) {
@@ -176,6 +178,12 @@ function component(width, height, color, x, y, type, name) {
         pictureAction();
       }else if(this.name == "quote"){
         quoteAction();
+      }else if(this.name == "nightstand"){
+        myText.text = "Looks like a boring nightstand. It have a lamp and several books on it.";
+      }else if(this.name == "randompainting1"){
+        myText.text = "A painting of a street view of Venice";
+      }else if(this.name == "chair"){
+        myText.text = "Several chairs surrounding a huge table. What is this for?";
       }
       this.activated = false;
     }
@@ -363,6 +371,11 @@ function checkCollision(otherobj, speedX, speedY){
     var otherright = otherobj.x + (otherobj.width);
     var othertop = otherobj.y + 10*ratio;
     var otherbottom = otherobj.y + (otherobj.height);
+  }else if(otherobj.name == "randompainting1"){
+    var otherleft = otherobj.x;
+    var otherright = otherobj.x + (otherobj.width);
+    var othertop = otherobj.y + 95*ratio;
+    var otherbottom = otherobj.y + 95*ratio + (otherobj.height);
   }else{
     var otherleft = otherobj.x;
     var otherright = otherobj.x + (otherobj.width);

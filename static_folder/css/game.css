@@ -34,32 +34,25 @@ canvas{
 
 #dreamcatcherItem{
   position: absolute;
-  /*display: none;*/
+  display: none;
 }
 
 #numberpad{
   position: absolute;
-  /*display: none;*/
+  display: none;
 }
 
 #numberpadItem{
   position: absolute;
+  display: none;
 }
 
 #codeNote{
   position: absolute;
-  max-width: 40%;
-  max-height: 40%;
-  top: 0; bottom: 0; left: 0; right: 500;
-  margin: auto;
   display: none;
 }
 
 #codeNoteItem{
   position: absolute;
-  max-width: 20%;
-  max-height: 20%;
-  right: 11%;
-  bottom: 3%;
   display: none;
 }
