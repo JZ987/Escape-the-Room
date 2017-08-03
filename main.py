@@ -36,16 +36,26 @@ class MainHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
         if user:
-            greeting = ('Welcome, <span id="username">%s</span>! (<a href="%s">Sign out</a>)' %
-                (user.nickname(), users.create_logout_url('/')))
+            query = Users.query(user.nickname() == Users.email)
+            userobjects = query.fetch()
+            if len(userobjects) > 0:
+                knownusername = userobjects[0].username
+                form = False
+                greeting = ('Welcome, <span id="username">%s</span>! (<a href="%s">Sign out</a>)' %
+                    (knownusername, users.create_logout_url('/')))
+            else:
+                form = True
+                greeting = ('Welcome, <span id="username">%s</span>! (<a href="%s">Sign out</a>)' %
+                    (user.nickname(), users.create_logout_url('/')))
         else:
+            form = False
             greeting = ('<a href="%s">Sign in</a>' %
                 users.create_login_url('/'))
 
         loginlink = (
             '<html><body>{}</body></html>'.format(greeting))
         my_vars = { "loginlink": loginlink,
-                    "user": user}
+                    "shoulddisplayform": form}
         template = jinja_environment.get_template('templates/index.html')
         self.response.write(template.render(my_vars))
 
