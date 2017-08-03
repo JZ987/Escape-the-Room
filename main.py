@@ -56,7 +56,7 @@ class InstructionsHandler(webapp2.RequestHandler):
         template = jinja_environment.get_template('templates/instructions.html')
         self.response.write(template.render(template_vars))
 
-class SaveScoreHandler(webbapp2.RequestHandler):
+class SaveScoreHandler(webapp2.RequestHandler):
     def post(self):
         user = users.get_current_user()
         score = self.request.get('score')
