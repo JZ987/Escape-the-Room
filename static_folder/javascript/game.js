@@ -1,6 +1,7 @@
 var myPlayer, myText;
 var obstacles = [];
-var text = "Grace has been kidnapped in her sleep and locked in an unknown room. Gather the clues to discover who the culprit is and escape the room.";
+var pianoObject;
+var text = "Grace has been kidnapped in her sleep and locked in an unknown room! Gather the clues to discover who the culprit is and escape the room.";
 var quoteComplete = dresserComplete = pictureComplete = dreamCatcherComplete = false;
 var ORIGINAL_WIDTH = 1440;
 var ORIGINAL_HEIGHT = 826;
@@ -14,7 +15,6 @@ function startGame() {
   myText = new textMessage(15*ratio + "px Fantasy", "red", myGameArea.canvas.width-(160*ratio), 40*ratio);
   //wallpaper
   for(var i = 10*ratio; i <= 1120*ratio; i+=80*ratio){
-    console.log(i);
     obstacles.push(new component(80*ratio, 150*ratio, "/resources/images/wallpaper.png", i, 10*ratio, "image"));
   }
   obstacles.push(
@@ -34,12 +34,10 @@ function startGame() {
     new component(300*ratio, 250*ratio, "/resources/images/speech-bubble-md.png", myGameArea.canvas.width-(305*ratio), 7*ratio, "image", "speech"),
     new component(53*ratio, 200*ratio, clock, 25*ratio, 10*ratio, "image", "clock"),
     new component(190*ratio, 200*ratio, "/resources/images/closet.png", 100*ratio, 10*ratio, "image", "closet"),
-    new component(190*ratio, 250*ratio, "/resources/images/piano.png", 200*ratio, 300*ratio, "image", "piano"),
     new component(224*ratio, 284*ratio, "/resources/images/bed2.png", 725*ratio, 60*ratio, "image", "bed"),
     new component(72*ratio, 125*ratio, "/resources/images/nightstand.png", 940*ratio, 70*ratio, "image", "nightstand"),
     new component(46*ratio, 50*ratio, "/resources/images/random painting.png", 625*ratio, 20*ratio, "image"),
     new component(60*ratio, 50*ratio, "/resources/images/random painting 2.png", 375*ratio, 20*ratio, "image", "randompainting1"),
-    new component(53*ratio, 100*ratio, "/resources/images/chair.png", 815*ratio, 440*ratio, "image", "chair"),
     new component(64*ratio, 100*ratio, "/resources/images/chair3.png", 710*ratio, 515*ratio, "image", "chair"),
     new component(64*ratio, 100*ratio, "/resources/images/chair4.png", 900*ratio, 515*ratio, "image", "chair"),
     new component(180*ratio, 150*ratio, "/resources/images/table.png", 750*ratio, 500*ratio, "image", "table"),
@@ -55,6 +53,7 @@ function startGame() {
     new component(55*ratio, 75*ratio, "/resources/images/chest side closed.png", myGameArea.canvas.width-(365*ratio), 350*ratio, "image", "chest"),
     new component(50*ratio, 15*ratio, "gold", 750*ratio, myGameArea.canvas.height-(15*ratio), "", "picture")
   );
+  pianoObject = new component(190*ratio, 250*ratio, "/resources/images/piano.png", 200*ratio, 300*ratio, "image", "piano");
 }
 
 var myGameArea = {
@@ -308,7 +307,7 @@ function chestAction(){
 }
 
 function doorAction(){
-  myText.text = "Who am I?";
+  myText.text = "This is the door leading outside. There's a question on this: 'Who am I?'";
   $("#doorInput").show();
   $('#doorInput').keypress(function(e){
       if(e.keyCode == 13){
@@ -385,13 +384,18 @@ function checkCollision(otherobj, speedX, speedY){
   if(otherobj.name == "piano"){
     var otherleft = otherobj.x;
     var otherright = otherobj.x + (otherobj.width);
-    var othertop = otherobj.y + 10*ratio;
+    var othertop = otherobj.y + 135*ratio;
     var otherbottom = otherobj.y + (otherobj.height);
   }else if(otherobj.name == "randompainting1"){
     var otherleft = otherobj.x;
     var otherright = otherobj.x + (otherobj.width);
     var othertop = otherobj.y + 95*ratio;
     var otherbottom = otherobj.y + 95*ratio + (otherobj.height);
+  }else if(otherobj.name == "chair1"){
+    var otherleft = otherobj.x;
+    var otherright = otherobj.x + (otherobj.width);
+    var othertop = otherobj.y + 75*ratio;
+    var otherbottom = otherobj.y + (otherobj.height);
   }else{
     var otherleft = otherobj.x;
     var otherright = otherobj.x + (otherobj.width);
@@ -456,7 +460,17 @@ function updateGameArea() {
       break;
     }
   }
-  myPlayer.update();
+  if(checkCollision(pianoObject, myPlayer.speedX, myPlayer.speedY)){
+    myPlayer.speedX = 0;
+    myPlayer.speedY = 0;
+  }
+  if(myPlayer.y < pianoObject.y){
+    myPlayer.update();
+    pianoObject.update();
+  }else{
+    pianoObject.update();
+    myPlayer.update();
+  }
   if (myGameArea.keys && myGameArea.keys[32]) {
     for(var i = 0; i < obstacles.length; i+=1){
       if(checkActivableObjects(obstacles[i])){
@@ -465,12 +479,12 @@ function updateGameArea() {
     }
   }
   myText.update();
-  $("#dreamcatcherItem").click(function(){$("#dreamcatcher").show();});
-  $("#numberpadItem").click(function(){$("#numberpad").show();});
-  $("#codeNoteItem").click(function(){$("#codeNote").show();});
-  $("#portraitItem").click(function(){$("#portrait").show();});
-  $("#noteItem").click(function(){$("#note").show();});
-  $("#quoteItem").click(function(){$("#quote").show();});
+  $("#dreamcatcherItem").click(function(){hideObjects();$("#dreamcatcher").show();});
+  $("#numberpadItem").click(function(){hideObjects();$("#numberpad").show();});
+  $("#codeNoteItem").click(function(){hideObjects();$("#codeNote").show();});
+  $("#portraitItem").click(function(){hideObjects();$("#portrait").show();});
+  $("#noteItem").click(function(){hideObjects();$("#note").show();});
+  $("#quoteItem").click(function(){hideObjects();$("#quote").show();});
   // var t1 = performance.now();
   // console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.");
 }
