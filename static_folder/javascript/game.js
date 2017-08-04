@@ -13,6 +13,7 @@ function startGame() {
         e.preventDefault();
         var code2 = $("#doorInput").val();
         if(code2.toLowerCase() == "mark"){
+          $("#doorInput").hide();
           myText.font = 30*ratio + "px Fantasy";
           myText.spacing = 40;
           myText.text = "Congratulations! Your time is: " + Math.round(myGameArea.frameNo/50) + " seconds!";
@@ -161,7 +162,7 @@ function adjustPlayArea(){
   $("#portraitItem").css({"width":137.4*ratio+"px","height":163.8*ratio+"px",left:1145*ratio+"px",top:450*ratio+"px"});
   $("#dreamcatcher").css({"width":316.4*ratio+"px","height":448*ratio+"px",left:396.8*ratio+"px",top:179*ratio+"px"});
   $("#dreamcatcherItem").css({"width":122.04*ratio+"px","height":172.8*ratio+"px",left:1296.36*ratio+"px",top:446.7*ratio+"px"});
-  $("#numberpad").css({"width":256*ratio+"px","height":350.4*ratio+"px",left:700*ratio+"px",top:227.8*ratio+"px"});
+  $("#numberpad").css({"width":289*ratio+"px","height":383*ratio+"px",left:700*ratio+"px",top:227.8*ratio+"px"});
   $("#numberpadItem").css({"width":128*ratio+"px","height":175.2*ratio+"px",left:1292.36*ratio+"px",top:626.02*ratio+"px"});
   $("#codeNote").css({"width":158*ratio+"px","height":198*ratio+"px",left:442*ratio+"px",top:304*ratio+"px"});
   $("#codeNoteItem").css({"width":138.25*ratio+"px","height":173.25*ratio+"px",left:1145*ratio+"px",top:627.97*ratio+"px"});
