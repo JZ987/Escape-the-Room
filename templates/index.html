@@ -11,6 +11,13 @@
     <div id="box">
       <h1>ESCAPE THE ROOM</h1>
       <h2>{{loginlink}}</h2>
+      {% if shoulddisplayform %}
+        <h2>
+        <form>
+          Username: <input type="text" name="name" id="nameinput" maxlength="12"/>
+        </form>
+        </h2>
+      {% endif %}
       <div id="boxofbuttons">
         <a href ="/instructions">
         <button type ="submit" id="instruction">Instructions</button></a>
@@ -20,5 +27,7 @@
         <button type="submit">High Scores</button></a>
       </div>
     </div>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+    <script src="/resources/javascript/signin.js"></script>
   </body>
 </html>

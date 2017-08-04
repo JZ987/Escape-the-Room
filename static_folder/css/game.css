@@ -15,49 +15,94 @@ canvas{
   background-position: left;
 }
 
+img{
+  position: absolute;
+  display: none;
+}
+
+#menu{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.8;
+  display: none;
+}
+
+#home{
+  position: absolute;
+  font-size: 50px;
+  top: 300px;
+  left: 600px;
+  border-radius: 12px;
+  font-family: arial;
+  box-shadow: 0 5px #999;
+}
+
+#restart{
+  position: absolute;
+  font-size: 50px;
+  top: 400px;
+  left: 640px;
+  border-radius: 12px;
+  font-family: arial;
+  box-shadow: 0 5px #999;
+}
+
+button:hover {
+  background-color: lightgray;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+button:active {
+  background-color: gray;
+  box-shadow: 0 3px #666;
+  transform: translateY(4px);
+  border: none;
+}
+
+button:focus{
+  outline: 0;
+}
+
 #chestInput{
   position: absolute;
   font-family: arial;
+  border: 2px black solid;
   display: none;
 }
 
 #doorInput{
   position: absolute;
   font-family: arial;
-  display: none;
-}
-/*
-#dreamcatcher{
-  position: absolute;
+  border: 2px black solid;
   display: none;
 }
 
-#dreamcatcherItem{
+#sparkle1{
   position: absolute;
-  display: none;
+  left: -70px;
+  top: 275px;
+  display: block;
 }
 
-#numberpad{
+#sparkle2{
   position: absolute;
-  display: none;
+  left: 440px;
+  top: 790px;
+  display: block;
 }
 
-#numberpadItem{
+#sparkle3{
   position: absolute;
-  display: none;
+  left: 550;
+  top: 790px;
+  display: block;
 }
 
-#codeNote{
+#sparkle4{
   position: absolute;
-  display: none;
-}
-
-#codeNoteItem{
-  position: absolute;
-  display: none;
-}*/
-
-img{
-  position: absolute;
-  display: none;
+  left: 725px;
+  top: 790px;
+  display: block;
 }

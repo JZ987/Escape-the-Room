@@ -24,10 +24,50 @@ button {
   left: 10px;
 }
 
+table {
+  font-size: 175%;
+  margin: auto;
+}
+
+th {
+  padding: 0 20px;
+}
+
 #highscorebox {
   height: 700px;
   width: 800px;
   border: 3px solid red;
   z-index: -5;
   background-color: rgba(255, 255, 255, 0.3);
+}
+
+.rowheader {
+  text-decoration: underline;
+}
+
+button {
+  width: 70px;
+  height: 30px;
+  font-size: 80%;
+  color: black;
+  background-color: #AB1818;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px #999;
+}
+
+button:hover {
+  background-color: #C81818;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+button:active {
+  background-color: #AC1818;
+  box-shadow: 0 3px #666;
+  transform: translateY(4px);
+}
+
+button:focus{
+  outline: 0;
 }

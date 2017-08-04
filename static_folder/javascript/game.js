@@ -1,12 +1,33 @@
 var myPlayer, myText;
 var obstacles = [];
-var text = "Grace has been kidnapped in her sleep and locked in an unknown room. Gather the clues to discover who the culprit is and escape the room.";
-var quoteComplete = dresserComplete = pictureComplete = dreamCatcherComplete = false;
+var pianoObject;
+var text = "Grace has been kidnapped in her sleep and locked in an unknown room! Gather the clues to discover who the culprit is and escape the room.";
+var quoteComplete = dresserComplete = pictureComplete = dreamCatcherComplete = chestComplete = false;
 var ORIGINAL_WIDTH = 1440;
 var ORIGINAL_HEIGHT = 826;
 var ratio;
 
 function startGame() {
+  $('#doorInput').keypress(function(e){
+      if(e.keyCode == 13){
+        e.preventDefault();
+        var code2 = $("#doorInput").val();
+        if(code2.toLowerCase() == "mark"){
+          myText.font = 30*ratio + "px Fantasy";
+          myText.spacing = 40;
+          myText.text = "Congratulations! Your time is: " + Math.round(myGameArea.frameNo/50) + " seconds!";
+          $("#win").fadeIn(2000);
+          document.head.innerHTML += '<audio src="/resources/music/laugh.mp3" autoplay></audio>';
+          saveScore(Math.round(myGameArea.frameNo/50));
+          setTimeout(function(){window.location.href = "/highscores";}, 4000);
+        }else{
+          myText.text = "Sorry. Wrong person. Please try again";
+          $("#doorInput").val("");
+        }
+      }
+  });
+  $("#home").click(function(){window.location.href = "/";});
+  $("#restart").click(function(){window.location.href = "/game";});
   myGameArea.start();
   adjustPlayArea();
   loadImages();
@@ -14,7 +35,6 @@ function startGame() {
   myText = new textMessage(15*ratio + "px Fantasy", "red", myGameArea.canvas.width-(160*ratio), 40*ratio);
   //wallpaper
   for(var i = 10*ratio; i <= 1120*ratio; i+=80*ratio){
-    console.log(i);
     obstacles.push(new component(80*ratio, 150*ratio, "/resources/images/wallpaper.png", i, 10*ratio, "image"));
   }
   obstacles.push(
@@ -34,12 +54,10 @@ function startGame() {
     new component(300*ratio, 250*ratio, "/resources/images/speech-bubble-md.png", myGameArea.canvas.width-(305*ratio), 7*ratio, "image", "speech"),
     new component(53*ratio, 200*ratio, clock, 25*ratio, 10*ratio, "image", "clock"),
     new component(190*ratio, 200*ratio, "/resources/images/closet.png", 100*ratio, 10*ratio, "image", "closet"),
-    new component(190*ratio, 250*ratio, "/resources/images/piano.png", 200*ratio, 300*ratio, "image", "piano"),
     new component(224*ratio, 284*ratio, "/resources/images/bed2.png", 725*ratio, 60*ratio, "image", "bed"),
     new component(72*ratio, 125*ratio, "/resources/images/nightstand.png", 940*ratio, 70*ratio, "image", "nightstand"),
     new component(46*ratio, 50*ratio, "/resources/images/random painting.png", 625*ratio, 20*ratio, "image"),
     new component(60*ratio, 50*ratio, "/resources/images/random painting 2.png", 375*ratio, 20*ratio, "image", "randompainting1"),
-    new component(53*ratio, 100*ratio, "/resources/images/chair.png", 815*ratio, 440*ratio, "image", "chair"),
     new component(64*ratio, 100*ratio, "/resources/images/chair3.png", 710*ratio, 515*ratio, "image", "chair"),
     new component(64*ratio, 100*ratio, "/resources/images/chair4.png", 900*ratio, 515*ratio, "image", "chair"),
     new component(180*ratio, 150*ratio, "/resources/images/table.png", 750*ratio, 500*ratio, "image", "table"),
@@ -49,12 +67,13 @@ function startGame() {
     //key objects
     new component(131*ratio, 95*ratio, "/resources/images/dresser.png", 550*ratio, 90*ratio, "image", "dresser"),
     new component(15*ratio, 75*ratio, "#451411", 0, 300*ratio, "", "dreamcatcher"),
-    new component(14*ratio, 17*ratio, "/resources/images/note.png", 600*ratio, 95*ratio, "image"),
+    new component(14*ratio, 17*ratio, "/resources/images/note.png", 600*ratio, 95*ratio, "image", "note"),
     new component(40*ratio, 15*ratio, "gold", 450*ratio, myGameArea.canvas.height-(15*ratio), "", "quote"),
     new component(100*ratio, 15*ratio, "red", 550*ratio, myGameArea.canvas.height-(15*ratio), "", "door"),
     new component(55*ratio, 75*ratio, "/resources/images/chest side closed.png", myGameArea.canvas.width-(365*ratio), 350*ratio, "image", "chest"),
     new component(50*ratio, 15*ratio, "gold", 750*ratio, myGameArea.canvas.height-(15*ratio), "", "picture")
   );
+  pianoObject = new component(190*ratio, 250*ratio, "/resources/images/piano.png", 200*ratio, 300*ratio, "image", "piano");
 }
 
 var myGameArea = {
@@ -70,6 +89,10 @@ var myGameArea = {
         if(e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 32){
           hideObjects();
           e.preventDefault();
+        }
+        if(e.keyCode == 27){
+          e.preventDefault();
+          $("#menu").show();
         }
         myGameArea.keys = (myGameArea.keys || []);
         myGameArea.keys[e.keyCode] = (e.type == "keydown");
@@ -95,6 +118,7 @@ function hideObjects(){
   $("#quote").hide();
   $("#portrait").hide();
   $("#note").hide();
+  $("#menu").hide();
 }
 
 function loadImages(){
@@ -113,6 +137,7 @@ function loadImages(){
   clock = new Image(); clock.src = "/resources/images/clock.png";
   clock2 = new Image(); clock2.src = "/resources/images/clock 2.png";
   clock3 = new Image(); clock3.src = "/resources/images/clock 3.png";
+  chestOpen = new Image(); chestOpen.src = "/resources/images/chest side open.png";
 }
 
 function adjustPlayArea(){
@@ -140,6 +165,13 @@ function adjustPlayArea(){
   $("#numberpadItem").css({"width":128*ratio+"px","height":175.2*ratio+"px",left:1292.36*ratio+"px",top:626.02*ratio+"px"});
   $("#codeNote").css({"width":158*ratio+"px","height":198*ratio+"px",left:442*ratio+"px",top:304*ratio+"px"});
   $("#codeNoteItem").css({"width":138.25*ratio+"px","height":173.25*ratio+"px",left:1145*ratio+"px",top:627.97*ratio+"px"});
+  $("#sparkle1").css({"width":108*ratio+"px","height":110*ratio+"px",left:-70*ratio+"px",top:275*ratio+"px"});
+  $("#sparkle2").css({"width":108*ratio+"px","height":110*ratio+"px",left:440*ratio+"px",top:790*ratio+"px"});
+  $("#sparkle3").css({"width":108*ratio+"px","height":110*ratio+"px",left:550*ratio+"px",top:790*ratio+"px"});
+  $("#sparkle4").css({"width":108*ratio+"px","height":110*ratio+"px",left:725*ratio+"px",top:790*ratio+"px"});
+  $("#win").css({"width":610.5*ratio+"px","height":630*ratio+"px",left:254.75*ratio+"px",top:88*ratio+"px"});
+  $("#home").css({"font-size":50*ratio+"px",top:300*ratio+"px",left:600*ratio+"px"});
+  $("#restart").css({"font-size":50*ratio+"px",top:400*ratio+"px",left:640*ratio+"px"});
 }
 
 function component(width, height, color, x, y, type, name) {
@@ -188,11 +220,13 @@ function component(width, height, color, x, y, type, name) {
       }else if(this.name == "quote"){
         quoteAction();
       }else if(this.name == "nightstand"){
-        myText.text = "Looks like a boring nightstand. It have a lamp and several books on it.";
+        myText.text = "Looks like a boring nightstand. It has a lamp and several books on it.";
       }else if(this.name == "randompainting1"){
         myText.text = "A painting of a street view of Venice";
       }else if(this.name == "chair"){
         myText.text = "Several chairs surrounding a huge table. What is this for?";
+      }else if(this.name == "table"){
+        myText.text = "This table is really old...smells weird as well.";
       }
       this.activated = false;
     }
@@ -239,6 +273,15 @@ function component(width, height, color, x, y, type, name) {
           this.image = clock;
         }else{
           this.image = clock3;
+        }
+      }else if(this.name == "chest"){
+        if(chestComplete){
+          this.image = chestOpen;
+        }
+      }else if(this.name == "note"){
+        if(dresserComplete){
+          this.width = 0;
+          this.height = 0;
         }
       }
       ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
@@ -288,41 +331,41 @@ function dreamCatcherAction(){
 }
 
 function chestAction(){
-  myText.text = "Please input the 4 digit number: ";
-  $("#chestInput").show();
-  $('#chestInput').keypress(function(e){
-      if(e.keyCode == 13){
-        e.preventDefault();
-        var code = $("#chestInput").val();
-        if(code == "6275"){
-          $("#numberpad").show();
-          $("#numberpadItem").show();
-          $("#codeNote").show();
-          $("#codeNoteItem").show();
-        }else{
-          myText.text = "Sorry. Wrong code. Please try again";
-          $("#chestInput").val("");
+  if(chestComplete){
+    myText.text = "There's nothing inside here anymore...";
+  }else{
+    myText.text = "Please input the 4 digit number: ";
+    $("#chestInput").show();
+    $('#chestInput').keypress(function(e){
+        if(e.keyCode == 13){
+          e.preventDefault();
+          var code = $("#chestInput").val();
+          if(code == "6275"){
+            $("#numberpad").show();
+            $("#numberpadItem").show();
+            $("#codeNote").show();
+            $("#codeNoteItem").show();
+            chestComplete = true;
+          }else{
+            myText.text = "Sorry. Wrong code. Please try again";
+            $("#chestInput").val("");
+          }
         }
-      }
-  });
+    });
+  }
+}
+
+function saveScore(score){
+  var url = "/savescore"
+  var settings = {"type" : "POST",
+                  "data" : {"score" : score}
+  }
+  jQuery.ajax(url, settings)
 }
 
 function doorAction(){
-  myText.text = "Who am I?";
+  myText.text = "This is the door leading outside. There's a question on this: 'Who am I?'";
   $("#doorInput").show();
-  $('#doorInput').keypress(function(e){
-      if(e.keyCode == 13){
-        e.preventDefault();
-        var code2 = $("#doorInput").val();
-        if(code2.toLowerCase() == "mark"){
-          myText.text = "Congradulation! You completed the game! Your time is: " + myGameArea.frameNo;
-          // myGameArea.stop();
-        }else{
-          myText.text = "Sorry. Wrong person. Please try again";
-          $("#doorInput").val("");
-        }
-      }
-  });
 }
 
 function textMessage(font, color, x, y){
@@ -345,6 +388,7 @@ function textMessage(font, color, x, y){
   this.color = color;
   this.x = x;
   this.y = y;
+  this.spacing = 20;
   this.update = function(){
     this.y = 50*ratio;
     ctx = myGameArea.context;
@@ -368,7 +412,7 @@ function textMessage(font, color, x, y){
     ctx.textAlign = "center";
     for(var i = 0; i < this.lines.length; i+=1){
       ctx.fillText(this.lines[i], this.x, this.y);
-      this.y += 20*ratio;
+      this.y += this.spacing*ratio;
     }
   }
 }
@@ -385,13 +429,23 @@ function checkCollision(otherobj, speedX, speedY){
   if(otherobj.name == "piano"){
     var otherleft = otherobj.x;
     var otherright = otherobj.x + (otherobj.width);
-    var othertop = otherobj.y + 10*ratio;
+    var othertop = otherobj.y + 135*ratio;
     var otherbottom = otherobj.y + (otherobj.height);
   }else if(otherobj.name == "randompainting1"){
     var otherleft = otherobj.x;
     var otherright = otherobj.x + (otherobj.width);
     var othertop = otherobj.y + 95*ratio;
     var otherbottom = otherobj.y + 95*ratio + (otherobj.height);
+  }else if(otherobj.name == "dreamcatcher"){
+    var otherleft = otherobj.x;
+    var otherright = otherobj.x + (otherobj.width) - 5*ratio;
+    var othertop = otherobj.y;
+    var otherbottom = otherobj.y + (otherobj.height) + 50*ratio;
+  }else if(otherobj.name == "door" || otherobj.name == "quote" || otherobj.name == "picture"){
+    var otherleft = otherobj.x;
+    var otherright = otherobj.x + (otherobj.width);
+    var othertop = otherobj.y + 5*ratio;
+    var otherbottom = otherobj.y + (otherobj.height);
   }else{
     var otherleft = otherobj.x;
     var otherright = otherobj.x + (otherobj.width);
@@ -456,12 +510,25 @@ function updateGameArea() {
       break;
     }
   }
-  myPlayer.update();
+  if(checkCollision(pianoObject, myPlayer.speedX, myPlayer.speedY)){
+    myPlayer.speedX = 0;
+    myPlayer.speedY = 0;
+  }
+  if(myPlayer.y < pianoObject.y){
+    myPlayer.update();
+    pianoObject.update();
+  }else{
+    pianoObject.update();
+    myPlayer.update();
+  }
   if (myGameArea.keys && myGameArea.keys[32]) {
     for(var i = 0; i < obstacles.length; i+=1){
       if(checkActivableObjects(obstacles[i])){
         obstacles[i].activated = true;
       }
+    }
+    if(checkActivableObjects(pianoObject)){
+      pianoObject.activated = true;
     }
   }
   myText.update();
